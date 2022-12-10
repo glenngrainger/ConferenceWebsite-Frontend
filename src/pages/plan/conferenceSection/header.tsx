@@ -60,7 +60,6 @@ const ManageOrganisationMenu = () => {
         <Divider />
         <MenuItem onClick={handleClose}>Edit Organisation</MenuItem>
         <MenuItem onClick={handleClose}>Delete Organisation</MenuItem>
-        {/* Foward ref? */}
         <AdminAccessModal modalClosedCallback={handleClose} />
       </Menu>
     </>

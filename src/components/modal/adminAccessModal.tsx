@@ -61,7 +61,6 @@ function Modal(props: SimpleDialogProps) {
   );
 }
 
-// Clicked callback?
 const AdminAccessModal = ({
   modalClosedCallback,
 }: {

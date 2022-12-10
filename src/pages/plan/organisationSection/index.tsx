@@ -17,6 +17,7 @@ import usePlanStore, { ViewEnum } from "../store/usePlanStore";
 import shallow from "zustand/shallow";
 import useOrganisationSection from "./useOrganisationSection";
 import useOrganisationStore from "../store/useOrganisationStore";
+import AddOrganisationModal from "../../../components/modal/addOrganisationModal";
 
 const OrganisationSection = () => {
   const selectedView = usePlanStore((state) => state.selectedView, shallow);
@@ -69,7 +70,7 @@ const OrganisationSection = () => {
           ))}
         </List>
         <CloseButton />
-        <ManageOrganisationSpeedDial />
+        <AddOrganisationModal />
       </Box>
     </Box>
   );
@@ -93,24 +94,6 @@ const CloseButton = () => {
     >
       Close
     </Button>
-  );
-};
-
-const ManageOrganisationSpeedDial = () => {
-  return (
-    <SpeedDial
-      ariaLabel="Add organisation button"
-      sx={{ position: "absolute", bottom: 16, right: 16 }}
-      icon={<AiOutlinePlus />}
-    >
-      {/* {actions.map((action) => (
-        <SpeedDialAction
-          key={action.name}
-          icon={action.icon}
-          tooltipTitle={action.name}
-        />
-      ))} */}
-    </SpeedDial>
   );
 };
 
