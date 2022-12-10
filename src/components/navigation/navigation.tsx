@@ -8,7 +8,11 @@ import IconButton from "@mui/material/IconButton";
 import { Menu, MenuItem } from "@mui/material";
 import useNavigation from "./useNavigation";
 
-const Navigation = () => {
+interface Props {
+  isLoggedIn: boolean;
+}
+
+const Navigation = ({ isLoggedIn }: Props) => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
@@ -22,7 +26,15 @@ const Navigation = () => {
             Conference
           </Typography>
           <DesktopNav />
-          <Button color="inherit">Login</Button>
+          {isLoggedIn ? (
+            <Button color="warning" variant="contained" href="/api/auth/logout">
+              Logout
+            </Button>
+          ) : (
+            <Button color="inherit" href="/api/auth/login">
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
