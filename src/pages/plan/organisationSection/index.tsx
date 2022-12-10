@@ -6,10 +6,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  CssBaseline,
   SpeedDial,
-  SpeedDialAction,
-  IconButton,
   Button,
   Typography,
 } from "@mui/material";
@@ -78,13 +75,6 @@ const OrganisationSection = () => {
   );
 };
 
-const actions = [
-  { icon: <AiOutlinePlus />, name: "Copy" },
-  { icon: <AiOutlinePlus />, name: "Save" },
-  { icon: <AiOutlinePlus />, name: "Print" },
-  { icon: <AiOutlinePlus />, name: "Share" },
-];
-
 const CloseButton = () => {
   const setSelectedView = usePlanStore((state) => state.setSelectedView);
   // Temp
@@ -109,17 +99,17 @@ const CloseButton = () => {
 const ManageOrganisationSpeedDial = () => {
   return (
     <SpeedDial
-      ariaLabel="SpeedDial basic example"
+      ariaLabel="Add organisation button"
       sx={{ position: "absolute", bottom: 16, right: 16 }}
       icon={<AiOutlinePlus />}
     >
-      {actions.map((action) => (
+      {/* {actions.map((action) => (
         <SpeedDialAction
           key={action.name}
           icon={action.icon}
           tooltipTitle={action.name}
         />
-      ))}
+      ))} */}
     </SpeedDial>
   );
 };

@@ -1,6 +1,7 @@
 import { Box, Typography, Button, Menu, MenuItem } from "@mui/material";
 import { AiOutlinePlus, AiOutlineDown } from "react-icons/ai";
 import { MdArrowBackIosNew } from "react-icons/md";
+import BackToOrganisationButton from "../organisationSection/backToOrganisationButton";
 import usePlanStore, { ViewEnum } from "../store/usePlanStore";
 import ConferenceSectionGrid from "./grid";
 import ConferenceSectionHeader from "./header";
@@ -22,26 +23,6 @@ const ConferenceSection = () => {
       <ConferenceSectionGrid />
       <BackToOrganisationButton />
     </Box>
-  );
-};
-
-const BackToOrganisationButton = () => {
-  const setSelectedView = usePlanStore((state) => state.setSelectedView);
-  return (
-    <Button
-      sx={{
-        position: "fixed",
-        bottom: 20,
-        left: 20,
-        display: { md: "none" },
-      }}
-      startIcon={<MdArrowBackIosNew />}
-      color="secondary"
-      variant="contained"
-      onClick={() => setSelectedView(ViewEnum.Organisation)}
-    >
-      Back to Organisations
-    </Button>
   );
 };
 
