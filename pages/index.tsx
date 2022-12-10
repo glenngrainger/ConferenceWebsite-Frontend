@@ -3,7 +3,7 @@ import Navigation from "../src/components/navigation/navigation";
 export default function Home() {
   return (
     <div>
-      <Navigation />
+      <Navigation isLoggedIn={false} />
     </div>
   );
 }

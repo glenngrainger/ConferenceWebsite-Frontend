@@ -1,19 +1,14 @@
 import create from "zustand";
 
-interface Organisation {
-  id: number;
-}
-
 interface OrganisationState {
-  organisations: Organisation[];
+  selectedOrganisationId: number | undefined;
+  setSelectedOrganisationId: (organisationId: number | undefined) => void;
 }
 
 const useOrganisationStore = create<OrganisationState>((set) => ({
-  organisations: [],
-  fetch: async () => {
-    const response = await fetch("");
-    set({ organisations: await response.json() });
-  },
+  selectedOrganisationId: undefined,
+  setSelectedOrganisationId: (organisationId) =>
+    set(() => ({ selectedOrganisationId: organisationId })),
 }));
 
 export default useOrganisationStore;

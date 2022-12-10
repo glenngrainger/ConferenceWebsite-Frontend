@@ -11,14 +11,23 @@ import {
   SpeedDialAction,
   IconButton,
   Button,
+  Typography,
 } from "@mui/material";
 import { CgOrganisation } from "react-icons/cg";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import usePlanStore, { ViewEnum } from "../store/usePlanStore";
+import shallow from "zustand/shallow";
+import useOrganisationSection from "./useOrganisationSection";
+import useOrganisationStore from "../store/useOrganisationStore";
 
 const OrganisationSection = () => {
-  const selectedView = usePlanStore((state) => state.selectedView);
+  const selectedView = usePlanStore((state) => state.selectedView, shallow);
+  const { organisations } = useOrganisationSection();
+  const organisationsList = organisations.data || [];
+  const { selectedOrganisationId, setSelectedOrganisationId } =
+    useOrganisationStore();
+
   return (
     <Box
       sx={{
@@ -43,11 +52,15 @@ const OrganisationSection = () => {
           borderColor: "grey.300",
         }}
       >
-        <CssBaseline />
-        {/* <ListHeader /> */}
         <Divider sx={{ mt: 2 }}>Organisations</Divider>
+        {organisationsList.length === 0 && (
+          <Typography sx={{ m: 1 }} variant="body2" color="text.secondary">
+            No admin access to any organisations. Add a new organisation to get
+            started
+          </Typography>
+        )}
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
+          {organisationsList.map((text, index) => (
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
