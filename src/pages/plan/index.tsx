@@ -9,11 +9,16 @@ import EmptyTemplate from "./organisationSection/emptyTemplate";
 
 const PlanPage = ({ session }: { session: Session }) => {
   const setSession = useUserStore((state) => state.setSession, shallow);
+  const setAccessToken = useUserStore((state) => state.setAccessToken, shallow);
   const selectedOrganisationId = useOrganisationStore(
     (state) => state.selectedOrganisationId,
     shallow
   );
-  useEffect(() => setSession(session), []);
+  useEffect(() => {
+    // Temporary - need to figure out
+    setSession(session);
+    setAccessToken("");
+  }, []);
   return (
     <>
       <OrganisationSection />

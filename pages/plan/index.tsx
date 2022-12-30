@@ -5,12 +5,15 @@ import ConferenceSection from "../../src/pages/plan/conferenceSection";
 import OrganisationSection from "../../src/pages/plan/organisationSection";
 import type { GetServerSideProps, NextPage } from "next";
 import PlanPage from "../../src/pages/plan";
+import dynamic from "next/dynamic";
+
+const DynamicPage = dynamic(() => import("../../src/pages/plan"));
 
 export default function Page({ session }: { session: string }) {
   return (
     <Box>
       <Navigation isLoggedIn={true} />
-      <PlanPage session={JSON.parse(session) as Session} />
+      <DynamicPage session={JSON.parse(session) as Session} />
     </Box>
   );
 }

@@ -58,13 +58,13 @@ const OrganisationSection = () => {
           </Typography>
         )}
         <List>
-          {organisationsList.map((text, index) => (
-            <ListItem key={text} disablePadding>
+          {organisationsList.map((organisation, index) => (
+            <ListItem key={organisation.id} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   <CgOrganisation />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={organisation.name} />
               </ListItemButton>
             </ListItem>
           ))}

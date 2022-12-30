@@ -1,6 +1,4 @@
-import { Box, Typography, Button, Menu, MenuItem } from "@mui/material";
-import { AiOutlinePlus, AiOutlineDown } from "react-icons/ai";
-import { MdArrowBackIosNew } from "react-icons/md";
+import { Box } from "@mui/material";
 import BackToOrganisationButton from "../organisationSection/backToOrganisationButton";
 import usePlanStore, { ViewEnum } from "../store/usePlanStore";
 import ConferenceSectionGrid from "./grid";

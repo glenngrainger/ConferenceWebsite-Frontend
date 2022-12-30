@@ -1,12 +1,14 @@
 import { useQuery } from "react-query";
+import { APIGet } from "../../../API/API";
+import useUserStore from "../../../store/useUserStore";
 
 const useOrganisationSection = () => {
-  const organisations = useQuery({
-    queryKey: ["organisations"],
-    queryFn: () => {
-      return [];
-    },
-  });
+  const accessToken = useUserStore((state) => state.accessToken);
+
+  const organisations = useQuery(
+    ["Organisations"],
+    async () => await APIGet("Organisation", accessToken)
+  );
 
   return { organisations } as const;
 };

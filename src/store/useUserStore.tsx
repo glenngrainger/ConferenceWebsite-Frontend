@@ -3,12 +3,16 @@ import create from "zustand";
 
 interface User {
   session: Session | undefined;
+  accessToken: string;
+  setAccessToken: (token: string) => void;
   setSession: (session: Session) => void;
 }
 
 const useUserStore = create<User>((set) => ({
   session: undefined,
-  setSession: (session) => set(() => ({ session: session })),
+  accessToken: "",
+  setAccessToken: (token: string) => set(() => ({ accessToken: token })),
+  setSession: (session) => set((state) => ({ ...state, session: session })),
 }));
 
 export default useUserStore;
