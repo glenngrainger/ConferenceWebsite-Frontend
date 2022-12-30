@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useRef, useState } from "react";
+import React, { ChangeEvent, SyntheticEvent, useRef, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -6,11 +6,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, SpeedDial } from "@mui/material";
+import { Box, SpeedDial, TextareaAutosize } from "@mui/material";
 import { AiOutlinePlus } from "react-icons/ai";
+import useOrganisationSection from "../../pages/plan/organisationSection/useOrganisationSection";
 
 const AddOrganisationModal = () => {
-  const organisationNameRef = useRef();
+  const { addOrganisationMutation } = useOrganisationSection();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -21,13 +24,17 @@ const AddOrganisationModal = () => {
     setOpen(false);
   };
 
-  const addOrganisationHandler = (e: SyntheticEvent) => {
+  const addOrganisationHandler = async (e: SyntheticEvent) => {
+    console.log("add");
     e.preventDefault();
 
-    // React query update - add to response to cache
     const toPost = {
-      name: organisationNameRef.current,
+      name,
+      description,
     };
+    console.log(toPost);
+    await addOrganisationMutation.mutateAsync(toPost);
+    handleClose();
   };
 
   return (
@@ -45,9 +52,9 @@ const AddOrganisationModal = () => {
             You will be added as an admin to the organisation. Other user access
             can be added once created
           </DialogContentText>
-          <Box component="form" onSubmit={addOrganisationHandler}>
+          <Box component="form">
             <TextField
-              ref={organisationNameRef.current}
+              value={name}
               autoFocus
               margin="dense"
               id="name"
@@ -55,12 +62,25 @@ const AddOrganisationModal = () => {
               type="text"
               fullWidth
               variant="standard"
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              value={description}
+              margin="dense"
+              id="standard-multiline-static"
+              label="Organisation summary"
+              type="text"
+              fullWidth
+              multiline
+              rows={4}
+              variant="standard"
+              onChange={(e) => setDescription(e.target.value)}
             />
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Create</Button>
+          <Button onClick={addOrganisationHandler}>Create</Button>
         </DialogActions>
       </Dialog>
     </>

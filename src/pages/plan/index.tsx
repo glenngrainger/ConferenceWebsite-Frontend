@@ -16,8 +16,8 @@ const PlanPage = ({ session }: { session: Session }) => {
   );
   useEffect(() => {
     // Temporary - need to figure out
-    setSession(session);
-    setAccessToken("");
+    // setSession(session);
+    // setAccessToken("");
   }, []);
   return (
     <>
