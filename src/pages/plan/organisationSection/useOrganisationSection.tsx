@@ -1,21 +1,25 @@
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { APIGet, APIPost } from "../../../API/API";
-import { getOrganisationCall, addOrganisationCall } from "../../../API/calls";
-import Organisation from "../../../models/Organisation";
-import useUserStore from "../../../store/useUserStore";
+import {
+  addOrganisationCall,
+  getOrganisationCall,
+} from "../../../API/frontendCalls";
 
 const useOrganisationSection = () => {
   const queryClient = useQueryClient();
-  const accessToken = useUserStore((state) => state.accessToken);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const organisations = useQuery(["Organisations"], async () =>
-    getOrganisationCall(accessToken)
+    getOrganisationCall()
   );
 
   const addOrganisationMutation = useMutation({
-    mutationFn: async (data: object) => addOrganisationCall(data, accessToken),
-    onError: async () => {
-      console.log("error");
+    mutationFn: async (data: object) => addOrganisationCall(data),
+    onError: async (error: any) => {
+      const validationErrors = error?.response?.data?.errors;
+      if (validationErrors !== undefined) {
+      }
+      // Maybe create a error response model?
     },
     onSuccess: async (newOrganisation) => {
       queryClient.setQueryData("Organisations", (prev: any) =>
