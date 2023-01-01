@@ -10,12 +10,12 @@ import { Box, SpeedDial, TextareaAutosize } from "@mui/material";
 import { AiOutlinePlus } from "react-icons/ai";
 import useOrganisationSection from "../../pages/plan/organisationSection/useOrganisationSection";
 import { ReturnErrorProps } from "../../pages/plan/hooks/useErrors";
+import useForm from "../../pages/plan/hooks/useForm";
 
 const AddOrganisationModal = () => {
   const { addOrganisationMutation, addValidationErrors } =
     useOrganisationSection();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const { values, updateValues } = useForm<{}>();
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -28,13 +28,7 @@ const AddOrganisationModal = () => {
 
   const addOrganisationHandler = async (e: SyntheticEvent) => {
     e.preventDefault();
-
-    const toPost = {
-      name,
-      description,
-    };
-
-    await addOrganisationMutation.mutateAsync(toPost);
+    await addOrganisationMutation.mutateAsync(values);
     handleClose();
   };
 
@@ -55,7 +49,7 @@ const AddOrganisationModal = () => {
           </DialogContentText>
           <Box component="form">
             <TextField
-              value={name}
+              value={values["name"] || ""}
               autoFocus
               margin="dense"
               id="name"
@@ -63,14 +57,14 @@ const AddOrganisationModal = () => {
               type="text"
               fullWidth
               variant="standard"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => updateValues("name", e.target.value)}
               {...ReturnErrorProps(
                 "Name",
                 addValidationErrors.validationErrors
               )}
             />
             <TextField
-              value={description}
+              value={values["description"] || ""}
               margin="dense"
               id="standard-multiline-static"
               label="Organisation summary"
@@ -79,7 +73,7 @@ const AddOrganisationModal = () => {
               multiline
               rows={4}
               variant="standard"
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) => updateValues("description", e.target.value)}
               {...ReturnErrorProps(
                 "Description",
                 addValidationErrors.validationErrors
