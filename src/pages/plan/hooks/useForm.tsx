@@ -11,7 +11,15 @@ function useForm<T>() {
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 
-  return { values, updateValues } as const;
+  function clearValues() {
+    setValues({});
+  }
+
+  function setAll(values: ValueObj) {
+    setValues(values);
+  }
+
+  return { values, updateValues, clearValues, setAll } as const;
 }
 
 export default useForm;

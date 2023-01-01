@@ -24,6 +24,17 @@ export const APIPost = async (
   return axios.post(`${URL}/${route}`, data, defaultConfig(token));
 };
 
+export const APIPut = async (
+  URL: string,
+  route: string,
+  data: object,
+  token?: string,
+  isSSR?: boolean
+) => {
+  if (isSSR) axios.defaults.httpsAgent = httpsAgent;
+  return axios.put(`${URL}/${route}`, data, defaultConfig(token));
+};
+
 const defaultConfig = function (accessToken?: string) {
   return { headers: { Authorization: `Bearer ${accessToken}` } };
 };

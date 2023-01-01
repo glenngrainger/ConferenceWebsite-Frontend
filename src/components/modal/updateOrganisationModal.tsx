@@ -1,54 +1,60 @@
-import React, { ChangeEvent, SyntheticEvent, useRef, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, SpeedDial, TextareaAutosize } from "@mui/material";
-import { AiOutlinePlus } from "react-icons/ai";
+import { Box, MenuItem } from "@mui/material";
 import useOrganisationSection from "../../pages/plan/organisationSection/useOrganisationSection";
 import { ReturnErrorProps } from "../../pages/plan/hooks/useErrors";
 import useForm from "../../pages/plan/hooks/useForm";
 
-const AddOrganisationModal = () => {
-  const { addOrganisationMutation, addValidationErrors } =
-    useOrganisationSection();
-  const { values, updateValues, clearValues } = useForm<{}>();
+const UpdateOrganisationModal = ({
+  modalClosedCallback,
+}: {
+  modalClosedCallback: () => void;
+}) => {
+  const {
+    updateOrganisationMutation,
+    updateValidationErrors,
+    getCurrentSelectedOrganisation,
+  } = useOrganisationSection();
+  const { values, updateValues, clearValues, setAll } = useForm<{}>();
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
+    const organisation = getCurrentSelectedOrganisation();
+    if (organisation === undefined) return;
+    setAll(organisation);
     setOpen(true);
   };
 
   const handleClose = () => {
     clearValues();
-    addValidationErrors.clearErrors();
+    updateValidationErrors.clearErrors();
     setOpen(false);
+    modalClosedCallback();
   };
 
   const addOrganisationHandler = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await addOrganisationMutation.mutateAsync(values);
+    await updateOrganisationMutation.mutateAsync(values);
     handleClose();
   };
 
   return (
     <>
-      <SpeedDial
-        ariaLabel="Add organisation button"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        icon={<AiOutlinePlus />}
-        onClick={handleClickOpen}
-      />
+      <MenuItem
+        onClick={() => {
+          handleClickOpen();
+        }}
+      >
+        Update Organisation
+      </MenuItem>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Organisation</DialogTitle>
+        <DialogTitle>Update Organisation</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            You will be added as an admin to the organisation. Other user access
-            can be added once created
-          </DialogContentText>
           <Box component="form">
             <TextField
               value={values["name"] || ""}
@@ -62,7 +68,7 @@ const AddOrganisationModal = () => {
               onChange={(e) => updateValues("name", e.target.value)}
               {...ReturnErrorProps(
                 "Name",
-                addValidationErrors.validationErrors
+                updateValidationErrors.validationErrors
               )}
             />
             <TextField
@@ -77,19 +83,19 @@ const AddOrganisationModal = () => {
               variant="standard"
               onChange={(e) => updateValues("summary", e.target.value)}
               {...ReturnErrorProps(
-                "summary",
-                addValidationErrors.validationErrors
+                "Summary",
+                updateValidationErrors.validationErrors
               )}
             />
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={addOrganisationHandler}>Create</Button>
+          <Button onClick={addOrganisationHandler}>Update</Button>
         </DialogActions>
       </Dialog>
     </>
   );
 };
 
-export default AddOrganisationModal;
+export default UpdateOrganisationModal;

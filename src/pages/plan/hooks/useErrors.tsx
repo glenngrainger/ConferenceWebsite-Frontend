@@ -33,7 +33,6 @@ const useErrors = () => {
 
 export function ConstructResponseModel(error: any) {
   let model: APIErrorModel = errorDefaults;
-  console.log(error);
   let data = error?.response?.data;
   if (data === undefined) return model;
 

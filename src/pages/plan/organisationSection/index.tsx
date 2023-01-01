@@ -52,6 +52,7 @@ const OrganisationSection = () => {
           position: "absolute",
           borderRight: 1,
           borderColor: "grey.300",
+          overflowY: "auto",
         }}
       >
         <Divider sx={{ mt: 2 }}>Organisations</Divider>
