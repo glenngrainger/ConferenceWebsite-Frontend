@@ -1,6 +1,6 @@
-import { TextFieldProps } from "@mui/material";
 import { useState, useEffect } from "react";
 import APIErrorModel, { Errors } from "../../../models/APIErrorModel";
+import { useSnackbar } from "notistack";
 
 const errorDefaults: APIErrorModel = {
   errorMessage: "",
@@ -8,6 +8,7 @@ const errorDefaults: APIErrorModel = {
 };
 
 const useErrors = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [validationErrors, setValidationErrors] = useState<Errors>(
     errorDefaults.errors
   );
@@ -15,8 +16,9 @@ const useErrors = () => {
   const updateErrors = (error: any) => {
     const result = ConstructResponseModel(error);
 
-    // Throw toast notification
+    // Throw toast notification if single error message is returned
     if (result.errorMessage) {
+      enqueueSnackbar(result.errorMessage, { variant: "error" });
     }
 
     setValidationErrors(result.errors);
@@ -31,13 +33,14 @@ const useErrors = () => {
 
 export function ConstructResponseModel(error: any) {
   let model: APIErrorModel = errorDefaults;
+  console.log(error);
   let data = error?.response?.data;
   if (data === undefined) return model;
 
   // Check if is string or object response
-  if (typeof error === "string") {
+  if (typeof data === "string") {
     model.errorMessage = data;
-  } else if (typeof error === "object" && data?.errors !== undefined) {
+  } else if (typeof data === "object" && data?.errors !== undefined) {
     model.errorMessage = "";
     model.errors = data.errors;
   }

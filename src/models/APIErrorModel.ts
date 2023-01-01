@@ -1,5 +1,5 @@
 export default interface APIErrorModel {
-  errorMessage: "";
+  errorMessage: string;
   errors: Errors;
 }
 
