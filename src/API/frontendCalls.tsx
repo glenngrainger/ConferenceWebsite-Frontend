@@ -3,7 +3,7 @@ import { APIGet, APIPost } from "./API";
 
 const BASE_URL = "/api";
 
-export const getOrganisationCall = async () => {
+export const getOrganisationsCall = async () => {
   var resp = await APIGet(BASE_URL, "Organisation");
   return (await resp.data) as Organisation[];
 };

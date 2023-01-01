@@ -3,7 +3,7 @@ import { APIGet, APIPost } from "./API";
 
 const BASE_URL = "https://localhost:7219/api";
 
-export const getOrganisationCall = async (accessToken: string) => {
+export const getOrganisationsCall = async (accessToken: string) => {
   return await APIGet(BASE_URL, "Organisation", accessToken, true);
 };
 

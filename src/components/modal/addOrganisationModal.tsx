@@ -9,9 +9,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Box, SpeedDial, TextareaAutosize } from "@mui/material";
 import { AiOutlinePlus } from "react-icons/ai";
 import useOrganisationSection from "../../pages/plan/organisationSection/useOrganisationSection";
+import { ReturnErrorProps } from "../../pages/plan/hooks/useErrors";
 
 const AddOrganisationModal = () => {
-  const { addOrganisationMutation } = useOrganisationSection();
+  const { addOrganisationMutation, addValidationErrors } =
+    useOrganisationSection();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [open, setOpen] = useState(false);
@@ -25,14 +27,13 @@ const AddOrganisationModal = () => {
   };
 
   const addOrganisationHandler = async (e: SyntheticEvent) => {
-    console.log("add");
     e.preventDefault();
 
     const toPost = {
       name,
       description,
     };
-    console.log(toPost);
+
     await addOrganisationMutation.mutateAsync(toPost);
     handleClose();
   };
@@ -63,6 +64,10 @@ const AddOrganisationModal = () => {
               fullWidth
               variant="standard"
               onChange={(e) => setName(e.target.value)}
+              {...ReturnErrorProps(
+                "Name",
+                addValidationErrors.validationErrors
+              )}
             />
             <TextField
               value={description}
@@ -75,6 +80,10 @@ const AddOrganisationModal = () => {
               rows={4}
               variant="standard"
               onChange={(e) => setDescription(e.target.value)}
+              {...ReturnErrorProps(
+                "Description",
+                addValidationErrors.validationErrors
+              )}
             />
           </Box>
         </DialogContent>

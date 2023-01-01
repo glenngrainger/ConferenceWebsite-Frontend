@@ -2,33 +2,36 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   addOrganisationCall,
-  getOrganisationCall,
+  getOrganisationsCall,
 } from "../../../API/frontendCalls";
+import useErrors from "../hooks/useErrors";
 
 const useOrganisationSection = () => {
   const queryClient = useQueryClient();
-  const [validationErrors, setValidationErrors] = useState({});
+  const addValidationErrors = useErrors();
 
   const organisations = useQuery(["Organisations"], async () =>
-    getOrganisationCall()
+    getOrganisationsCall()
   );
 
   const addOrganisationMutation = useMutation({
     mutationFn: async (data: object) => addOrganisationCall(data),
     onError: async (error: any) => {
-      const validationErrors = error?.response?.data?.errors;
-      if (validationErrors !== undefined) {
-      }
-      // Maybe create a error response model?
+      addValidationErrors.updateErrors(error);
     },
     onSuccess: async (newOrganisation) => {
       queryClient.setQueryData("Organisations", (prev: any) =>
         prev ? [...prev, newOrganisation] : [newOrganisation]
       );
+      addValidationErrors.clearErrors();
     },
   });
 
-  return { organisations, addOrganisationMutation } as const;
+  return {
+    organisations,
+    addOrganisationMutation,
+    addValidationErrors,
+  } as const;
 };
 
 export default useOrganisationSection;
