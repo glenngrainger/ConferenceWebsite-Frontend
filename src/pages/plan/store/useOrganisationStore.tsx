@@ -1,8 +1,8 @@
 import create from "zustand";
 
 interface OrganisationState {
-  selectedOrganisationId: number | undefined;
-  setSelectedOrganisationId: (organisationId: number | undefined) => void;
+  selectedOrganisationId: string | undefined;
+  setSelectedOrganisationId: (organisationId: string | undefined) => void;
 }
 
 const useOrganisationStore = create<OrganisationState>((set) => ({

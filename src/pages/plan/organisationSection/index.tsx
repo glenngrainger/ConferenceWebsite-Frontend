@@ -25,6 +25,10 @@ const OrganisationSection = () => {
   const organisationsList = organisations.data || [];
   const { selectedOrganisationId, setSelectedOrganisationId } =
     useOrganisationStore();
+  const setSelectedView = usePlanStore(
+    (state) => state.setSelectedView,
+    shallow
+  );
 
   return (
     <Box
@@ -58,8 +62,15 @@ const OrganisationSection = () => {
           </Typography>
         )}
         <List>
-          {organisationsList.map((organisation, index) => (
-            <ListItem key={organisation.id} disablePadding>
+          {organisationsList.map((organisation) => (
+            <ListItem
+              key={organisation.id}
+              disablePadding
+              onClick={() => {
+                setSelectedOrganisationId(organisation.id);
+                setSelectedView(ViewEnum.ConferenceHome);
+              }}
+            >
               <ListItemButton>
                 <ListItemIcon>
                   <CgOrganisation />
@@ -69,31 +80,9 @@ const OrganisationSection = () => {
             </ListItem>
           ))}
         </List>
-        <CloseButton />
         <AddOrganisationModal />
       </Box>
     </Box>
-  );
-};
-
-const CloseButton = () => {
-  const setSelectedView = usePlanStore((state) => state.setSelectedView);
-  // Temp
-  return (
-    <Button
-      sx={{
-        position: "absolute",
-        bottom: 20,
-        left: 20,
-        display: { md: "none" },
-      }}
-      startIcon={<IoMdCloseCircleOutline />}
-      color="secondary"
-      variant="outlined"
-      onClick={() => setSelectedView(ViewEnum.ConferenceHome)}
-    >
-      Close
-    </Button>
   );
 };
 
