@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { AiOutlinePlus, AiOutlineDown } from "react-icons/ai";
 import AdminAccessModal from "../../../components/modal/adminAccessModal";
+import DeleteOrganisationModal from "../../../components/modal/deleteOrganisationModal";
 import UpdateOrganisationModal from "../../../components/modal/updateOrganisationModal";
 import useMenu from "../hooks/useMenu";
 
@@ -60,7 +61,7 @@ const ManageOrganisationMenu = () => {
         <MenuItem onClick={handleClose}>New Conference</MenuItem>
         <Divider />
         <UpdateOrganisationModal modalClosedCallback={handleClose} />
-        <MenuItem onClick={handleClose}>Delete Organisation</MenuItem>
+        <DeleteOrganisationModal modalClosedCallback={handleClose} />
         <AdminAccessModal modalClosedCallback={handleClose} />
       </Menu>
     </>

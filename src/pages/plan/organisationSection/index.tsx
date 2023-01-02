@@ -6,13 +6,9 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  SpeedDial,
-  Button,
   Typography,
 } from "@mui/material";
 import { CgOrganisation } from "react-icons/cg";
-import { AiOutlinePlus } from "react-icons/ai";
-import { IoMdCloseCircleOutline } from "react-icons/io";
 import usePlanStore, { ViewEnum } from "../store/usePlanStore";
 import shallow from "zustand/shallow";
 import useOrganisationSection from "./useOrganisationSection";
@@ -23,8 +19,7 @@ const OrganisationSection = () => {
   const selectedView = usePlanStore((state) => state.selectedView, shallow);
   const { organisations } = useOrganisationSection();
   const organisationsList = organisations.data || [];
-  const { selectedOrganisationId, setSelectedOrganisationId } =
-    useOrganisationStore();
+  const { setSelectedOrganisationId } = useOrganisationStore();
   const setSelectedView = usePlanStore(
     (state) => state.setSelectedView,
     shallow

@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   addOrganisationCall,
+  deleteOrganisationCall,
   getOrganisationsCall,
   updateOrganisationCall,
 } from "../../../API/frontendCalls";
@@ -8,14 +9,21 @@ import Organisation from "../../../models/Organisation";
 import useErrors from "../hooks/useErrors";
 import useOrganisationStore from "../store/useOrganisationStore";
 import { useSnackbar } from "notistack";
+import shallow from "zustand/shallow";
 
 const useOrganisationSection = () => {
   const queryClient = useQueryClient();
   const addValidationErrors = useErrors();
   const updateValidationErrors = useErrors();
-  const selectedOrganisationId = useOrganisationStore(
-    (state) => state.selectedOrganisationId
-  );
+  const deleteValidationErrors = useErrors();
+  const { selectedOrganisationId, setSelectedOrganisationId } =
+    useOrganisationStore(
+      (state) => ({
+        selectedOrganisationId: state.selectedOrganisationId,
+        setSelectedOrganisationId: state.setSelectedOrganisationId,
+      }),
+      shallow
+    );
   const { enqueueSnackbar } = useSnackbar();
 
   const organisations = useQuery(["Organisations"], async () =>
@@ -55,6 +63,23 @@ const useOrganisationSection = () => {
     },
   });
 
+  const deleteOrganisationMutation = useMutation({
+    mutationFn: async (organisationId: string) =>
+      deleteOrganisationCall(organisationId),
+    onError: async (error: any) => {
+      deleteValidationErrors.updateErrors(error);
+    },
+    onSuccess: async (organisationId) => {
+      queryClient.setQueryData(
+        "Organisations",
+        (prev: any) =>
+          prev && [...prev.filter((x: Organisation) => x.id !== organisationId)]
+      );
+      setSelectedOrganisationId(undefined);
+      deleteValidationErrors.clearErrors();
+    },
+  });
+
   function getCurrentSelectedOrganisation() {
     let organisation = getOrganisationById(selectedOrganisationId || "");
 
@@ -84,6 +109,8 @@ const useOrganisationSection = () => {
     addValidationErrors,
     updateValidationErrors,
     updateOrganisationMutation,
+    deleteOrganisationMutation,
+    deleteValidationErrors,
     getCurrentSelectedOrganisation,
   } as const;
 };

@@ -1,5 +1,5 @@
 import Organisation from "../models/Organisation";
-import { APIGet, APIPost, APIPut } from "./API";
+import { APIDelete, APIGet, APIPost, APIPut } from "./API";
 
 const BASE_URL = "/api";
 
@@ -16,4 +16,9 @@ export const addOrganisationCall = async (data: object) => {
 export const updateOrganisationCall = async (id: string, data: object) => {
   var resp = await APIPut(BASE_URL, `Organisation/${id}`, data);
   return (await resp.data) as Organisation;
+};
+
+export const deleteOrganisationCall = async (id: string) => {
+  await APIDelete(BASE_URL, `Organisation/${id}`);
+  return id;
 };

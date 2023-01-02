@@ -1,4 +1,4 @@
-import { APIGet, APIPost, APIPut } from "./API";
+import { APIDelete, APIGet, APIPost, APIPut } from "./API";
 
 const BASE_URL = "https://localhost:7219/api";
 
@@ -19,4 +19,11 @@ export const updateOrganisationCall = async (
   accessToken: string
 ) => {
   return await APIPut(BASE_URL, `Organisation/${id}`, data, accessToken, true);
+};
+
+export const deleteOrganisationCall = async (
+  id: string,
+  accessToken: string
+) => {
+  return await APIDelete(BASE_URL, `Organisation/${id}`, accessToken, true);
 };

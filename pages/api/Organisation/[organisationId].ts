@@ -1,5 +1,8 @@
 import { getAccessToken, withApiAuthRequired } from "@auth0/nextjs-auth0";
-import { updateOrganisationCall } from "../../../src/API/ssrCalls";
+import {
+  deleteOrganisationCall,
+  updateOrganisationCall,
+} from "../../../src/API/ssrCalls";
 
 export default withApiAuthRequired(async function handle(req, res) {
   try {
@@ -20,11 +23,13 @@ export default withApiAuthRequired(async function handle(req, res) {
         );
         res.status(resp.status).json(await resp.data);
         break;
-      //   case "DELETE":
-      //     resp = await addOrganisationCall(body, accessToken || "");
-      //     console.log(resp.data);
-      //     res.status(resp.status).json(await resp.data);
-      //     break;
+      case "DELETE":
+        resp = await deleteOrganisationCall(
+          organisationId as string,
+          accessToken || ""
+        );
+        res.status(resp.status).json(await resp.data);
+        break;
       default:
         res.status(500).end("Not found");
     }
