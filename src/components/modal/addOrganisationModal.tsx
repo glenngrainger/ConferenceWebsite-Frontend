@@ -77,7 +77,7 @@ const AddOrganisationModal = () => {
               variant="standard"
               onChange={(e) => updateValues("summary", e.target.value)}
               {...ReturnErrorProps(
-                "summary",
+                "Summary",
                 addValidationErrors.validationErrors
               )}
             />

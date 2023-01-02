@@ -2,16 +2,9 @@ import { useState, useEffect } from "react";
 import APIErrorModel, { Errors } from "../../../models/APIErrorModel";
 import { useSnackbar } from "notistack";
 
-const errorDefaults: APIErrorModel = {
-  errorMessage: "",
-  errors: {} as Errors,
-};
-
 const useErrors = () => {
   const { enqueueSnackbar } = useSnackbar();
-  const [validationErrors, setValidationErrors] = useState<Errors>(
-    errorDefaults.errors
-  );
+  const [validationErrors, setValidationErrors] = useState<Errors>({});
 
   const updateErrors = (error: any) => {
     const result = ConstructResponseModel(error);
@@ -25,14 +18,17 @@ const useErrors = () => {
   };
 
   const clearErrors = () => {
-    setValidationErrors(errorDefaults.errors);
+    setValidationErrors({});
   };
 
   return { validationErrors, updateErrors, clearErrors } as const;
 };
 
 export function ConstructResponseModel(error: any) {
-  let model: APIErrorModel = errorDefaults;
+  let model: APIErrorModel = {
+    errorMessage: "",
+    errors: {} as Errors,
+  };
   let data = error?.response?.data;
   if (data === undefined) return model;
 
@@ -53,7 +49,7 @@ interface ErrorProps {
 }
 export function ReturnErrorProps(field: string, errors: Errors) {
   return {
-    error: errors[field] || false,
+    error: errors[field] ? true : false,
     helperText: errors[field] ? errors[field].join("\n") : "",
   } as unknown as ErrorProps;
 }
