@@ -6,11 +6,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, SpeedDial, TextareaAutosize } from "@mui/material";
+import { Box, SpeedDial } from "@mui/material";
 import { AiOutlinePlus } from "react-icons/ai";
-import useOrganisationSection from "../../pages/plan/organisationSection/useOrganisationSection";
-import { ReturnErrorProps } from "../../pages/plan/hooks/useErrors";
-import useForm from "../../pages/plan/hooks/useForm";
+import useOrganisationSection from "../../../pages/plan/organisationSection/useOrganisationSection";
+import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
+import useForm from "../../../pages/plan/hooks/useForm";
 
 const AddOrganisationModal = () => {
   const { addOrganisationMutation, addValidationErrors } =

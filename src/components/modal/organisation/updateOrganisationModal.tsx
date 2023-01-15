@@ -6,9 +6,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, MenuItem } from "@mui/material";
-import useOrganisationSection from "../../pages/plan/organisationSection/useOrganisationSection";
-import { ReturnErrorProps } from "../../pages/plan/hooks/useErrors";
-import useForm from "../../pages/plan/hooks/useForm";
+import useOrganisationSection from "../../../pages/plan/organisationSection/useOrganisationSection";
+import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
+import useForm from "../../../pages/plan/hooks/useForm";
 
 const UpdateOrganisationModal = ({
   modalClosedCallback,
@@ -37,7 +37,7 @@ const UpdateOrganisationModal = ({
     modalClosedCallback();
   };
 
-  const addOrganisationHandler = async (e: SyntheticEvent) => {
+  const updateOrganisationHandler = async (e: SyntheticEvent) => {
     e.preventDefault();
     await updateOrganisationMutation.mutateAsync(values);
     handleClose();
@@ -91,7 +91,7 @@ const UpdateOrganisationModal = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={addOrganisationHandler}>Update</Button>
+          <Button onClick={updateOrganisationHandler}>Update</Button>
         </DialogActions>
       </Dialog>
     </>

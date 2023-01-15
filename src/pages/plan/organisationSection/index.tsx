@@ -13,7 +13,7 @@ import usePlanStore, { ViewEnum } from "../store/usePlanStore";
 import shallow from "zustand/shallow";
 import useOrganisationSection from "./useOrganisationSection";
 import useOrganisationStore from "../store/useOrganisationStore";
-import AddOrganisationModal from "../../../components/modal/addOrganisationModal";
+import AddOrganisationModal from "../../../components/modal/organisation/addOrganisationModal";
 
 const OrganisationSection = () => {
   const selectedView = usePlanStore((state) => state.selectedView, shallow);

@@ -1,16 +1,9 @@
-import {
-  Box,
-  Typography,
-  Button,
-  Menu,
-  MenuItem,
-  TextField,
-  Divider,
-} from "@mui/material";
-import { AiOutlinePlus, AiOutlineDown } from "react-icons/ai";
-import AdminAccessModal from "../../../components/modal/adminAccessModal";
-import DeleteOrganisationModal from "../../../components/modal/deleteOrganisationModal";
-import UpdateOrganisationModal from "../../../components/modal/updateOrganisationModal";
+import { Box, Typography, Button, Menu, Divider } from "@mui/material";
+import { AiOutlineDown } from "react-icons/ai";
+import AddConferenceModal from "../../../components/modal/conference/addConferenceModal";
+import AdminAccessModal from "../../../components/modal/organisation/adminAccessModal";
+import DeleteOrganisationModal from "../../../components/modal/organisation/deleteOrganisationModal";
+import UpdateOrganisationModal from "../../../components/modal/organisation/updateOrganisationModal";
 import useMenu from "../hooks/useMenu";
 
 const ConferenceSectionHeader = () => {
@@ -58,7 +51,7 @@ const ManageOrganisationMenu = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>New Conference</MenuItem>
+        <AddConferenceModal modalClosedCallback={handleClose} />
         <Divider />
         <UpdateOrganisationModal modalClosedCallback={handleClose} />
         <DeleteOrganisationModal modalClosedCallback={handleClose} />

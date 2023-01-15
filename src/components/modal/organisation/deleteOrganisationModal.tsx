@@ -5,8 +5,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DialogContentText, MenuItem } from "@mui/material";
-import useOrganisationSection from "../../pages/plan/organisationSection/useOrganisationSection";
-import useOrganisationStore from "../../pages/plan/store/useOrganisationStore";
+import useOrganisationSection from "../../../pages/plan/organisationSection/useOrganisationSection";
+import useOrganisationStore from "../../../pages/plan/store/useOrganisationStore";
 import shallow from "zustand/shallow";
 
 const DeleteOrganisationModal = ({
@@ -20,12 +20,12 @@ const DeleteOrganisationModal = ({
     (state) => state.selectedOrganisationId,
     shallow
   );
+  const selectedOrganisation = getCurrentSelectedOrganisation();
 
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
-    const organisation = getCurrentSelectedOrganisation();
-    if (organisation === undefined) return;
+    if (selectedOrganisation === undefined) return;
     setOpen(true);
   };
 
@@ -36,7 +36,9 @@ const DeleteOrganisationModal = ({
 
   const deleteOrganisationHandler = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await deleteOrganisationMutation.mutateAsync(selectedOrganisationId || "");
+    await deleteOrganisationMutation.mutateAsync(
+      selectedOrganisation?.id || ""
+    );
     handleClose();
   };
 
@@ -50,7 +52,7 @@ const DeleteOrganisationModal = ({
         Delete Organisation
       </MenuItem>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Delete Organisation</DialogTitle>
+        <DialogTitle>Delete {selectedOrganisation?.name}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Are you sure you want to delete the organisation? This action cannot
