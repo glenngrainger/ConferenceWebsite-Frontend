@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { CgOrganisation } from "react-icons/cg";
 import usePlanStore, { ViewEnum } from "../store/usePlanStore";
@@ -16,10 +17,12 @@ import useOrganisationStore from "../store/useOrganisationStore";
 import AddOrganisationModal from "../../../components/modal/organisation/addOrganisationModal";
 
 const OrganisationSection = () => {
+  const theme = useTheme();
   const selectedView = usePlanStore((state) => state.selectedView, shallow);
   const { organisations } = useOrganisation();
   const organisationsList = organisations.data || [];
-  const { setSelectedOrganisationId } = useOrganisationStore();
+  const { selectedOrganisationId, setSelectedOrganisationId } =
+    useOrganisationStore();
   const setSelectedView = usePlanStore(
     (state) => state.setSelectedView,
     shallow
@@ -62,8 +65,13 @@ const OrganisationSection = () => {
             <ListItem
               key={organisation.id}
               disablePadding
+              sx={{
+                backgroundColor:
+                  organisation.id === selectedOrganisationId
+                    ? theme.palette.grey[200]
+                    : theme.palette.background,
+              }}
               onClick={() => {
-                // clearConferencesCache();
                 setSelectedOrganisationId(organisation.id);
                 setSelectedView(ViewEnum.ConferenceHome);
               }}

@@ -30,18 +30,21 @@ const ManageConference = ({
 }: {
   modalClosedCallback: () => void;
 }) => {
-  const triggerCreateRequest = useConferenceModalStore(
-    (state) => state.triggerCreateRequest,
+  const { triggerCreateRequest, isOpen, setIsOpen } = useConferenceModalStore(
+    (state) => ({
+      triggerCreateRequest: state.triggerCreateRequest,
+      isOpen: state.isOpen,
+      setIsOpen: state.setIsOpen,
+    }),
     shallow
   );
-  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setIsOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setIsOpen(false);
     modalClosedCallback();
   };
 
@@ -56,7 +59,7 @@ const ManageConference = ({
       </MenuItem>
       <Dialog
         fullScreen
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
