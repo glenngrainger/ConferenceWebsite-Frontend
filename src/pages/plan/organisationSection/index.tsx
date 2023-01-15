@@ -63,6 +63,7 @@ const OrganisationSection = () => {
               key={organisation.id}
               disablePadding
               onClick={() => {
+                // clearConferencesCache();
                 setSelectedOrganisationId(organisation.id);
                 setSelectedView(ViewEnum.ConferenceHome);
               }}

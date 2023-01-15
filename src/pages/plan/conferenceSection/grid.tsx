@@ -9,62 +9,63 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { red } from "@mui/material/colors";
 import Grid from "@mui/material/Unstable_Grid2";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import useConference from "../../../hooks/useConference";
 
 const ConferenceSectionGrid = () => {
+  const { conferences } = useConference();
+  const conferencesList = conferences.data || [];
   return (
-    <Grid
-      container
-      //   spacing={{ xs: 2, md: 3 }}
-      columns={{ xs: 2, sm: 4, md: 12 }}
-      sx={{ mb: { xs: 8 } }}
-    >
-      {Array.from(Array(6)).map((_, index) => (
-        <Grid
-          xs={2}
-          sm={4}
-          md={4}
-          key={index}
-          sx={{
-            px: 2,
-            pb: 2,
-          }}
-        >
-          <Card
+    <Grid container columns={{ xs: 2, sm: 4, md: 12 }} sx={{ mb: { xs: 8 } }}>
+      {conferencesList.map((conference) => {
+        const conferenceCount = conference.occurrenceCount || 0;
+        const conferenceCountText = `${conferenceCount} Occurrence${
+          conferenceCount > 1 ? "s" : ""
+        }`;
+        return (
+          <Grid
+            xs={2}
+            sm={4}
+            md={4}
+            key={conference.id}
             sx={{
-              minHeight: "250px",
-              maxHeight: "250px",
+              px: 2,
+              pb: 2,
             }}
-            variant="outlined"
           >
-            <CardHeader
-              action={
-                <IconButton aria-label="settings">
-                  <BiDotsVerticalRounded />
-                </IconButton>
-              }
-              title="Test Conference"
-              subheader="3 Scheduled"
-            />
-            <CardContent>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ overflowY: "auto", maxHeight: "75px" }}
-              >
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              <Button size="small">Schedule</Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      ))}
+            <Card
+              sx={{
+                // minHeight: "250px",
+                maxHeight: "250px",
+              }}
+              variant="outlined"
+            >
+              <CardHeader
+                action={
+                  <IconButton aria-label="settings">
+                    <BiDotsVerticalRounded />
+                  </IconButton>
+                }
+                title={conference.name}
+                subheader={conferenceCountText}
+              />
+              <CardContent sx={{ minHeight: "60px", maxHeight: "60px" }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ overflowY: "auto" }}
+                >
+                  {conference.summary}
+                </Typography>
+              </CardContent>
+              <CardActions disableSpacing>
+                <Button size="small">Schedule</Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        );
+      })}
     </Grid>
   );
 };

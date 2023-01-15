@@ -3,4 +3,5 @@ export default interface Conference {
   name: string;
   summary: string;
   organisationId: string;
+  occurrenceCount: number | undefined;
 }

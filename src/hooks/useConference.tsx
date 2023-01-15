@@ -15,8 +15,10 @@ const useConference = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const conferences = useQuery(["Conferences"], async () =>
-    selectedOrganisationId ? getConferencesCall(selectedOrganisationId) : []
+  const conferences = useQuery(
+    ["Conferences", { organisationId: selectedOrganisationId }],
+    async () =>
+      selectedOrganisationId ? getConferencesCall(selectedOrganisationId) : []
   );
 
   const addConferenceMutation = useMutation({
@@ -25,14 +27,19 @@ const useConference = () => {
       addValidationErrors.updateErrors(error);
     },
     onSuccess: async (newConference) => {
-      queryClient.setQueryData("Conferences", (prev: any) =>
-        prev ? [...prev, newConference] : [newConference]
+      queryClient.setQueryData(
+        ["Conferences", { organisationId: selectedOrganisationId }],
+        (prev: any) => (prev ? [...prev, newConference] : [newConference])
       );
       addValidationErrors.clearErrors();
     },
   });
 
-  return { conferences, addConferenceMutation, addValidationErrors } as const;
+  return {
+    conferences,
+    addConferenceMutation,
+    addValidationErrors,
+  } as const;
 };
 
 export default useConference;

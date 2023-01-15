@@ -4,9 +4,11 @@ import AddConferenceModal from "../../../components/modal/conference/addConferen
 import AdminAccessModal from "../../../components/modal/organisation/adminAccessModal";
 import DeleteOrganisationModal from "../../../components/modal/organisation/deleteOrganisationModal";
 import UpdateOrganisationModal from "../../../components/modal/organisation/updateOrganisationModal";
+import useConference from "../../../hooks/useConference";
 import useMenu from "../hooks/useMenu";
 
 const ConferenceSectionHeader = () => {
+  const { conferences } = useConference();
   return (
     <Box
       sx={{
@@ -16,7 +18,7 @@ const ConferenceSectionHeader = () => {
       }}
     >
       <Typography variant="h4" sx={{ fontSize: "24px" }}>
-        21 Conferences
+        {conferences?.data?.length || 0} Conferences
       </Typography>
       <Box sx={{ display: "flex", gap: "12px", ml: "auto" }}>
         {/* <Button>New Conference</Button> */}
