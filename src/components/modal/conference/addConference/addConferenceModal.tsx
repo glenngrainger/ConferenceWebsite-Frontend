@@ -1,10 +1,6 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import ListItemText from "@mui/material/ListItemText";
-import ListItem from "@mui/material/ListItem";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -12,12 +8,13 @@ import Typography from "@mui/material/Typography";
 import { AiOutlineClose } from "react-icons/ai";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  MenuItem,
-  useTheme,
-} from "@mui/material";
+import { MenuItem } from "@mui/material";
+import { useState } from "react";
+import ConferenceNavigation from "./conferenceNavigation";
+import ConferenceDetailsForm from "./conferenceDetailsForm";
+import useConference from "../../../../hooks/useConference";
+import useConferenceModalStore from "./useConferenceModalStore";
+import shallow from "zustand/shallow";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -33,8 +30,11 @@ const ManageConference = ({
 }: {
   modalClosedCallback: () => void;
 }) => {
-  const [open, setOpen] = React.useState(false);
-  const theme = useTheme();
+  const triggerCreateRequest = useConferenceModalStore(
+    (state) => state.triggerCreateRequest,
+    shallow
+  );
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -73,12 +73,13 @@ const ManageConference = ({
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               New Conference
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
+            <Button autoFocus color="inherit" onClick={triggerCreateRequest}>
               Create
             </Button>
           </Toolbar>
         </AppBar>
-        <List>
+        <ConferenceDetailsForm />
+        {/* <List>
           <ListItem button>
             <ListItemText primary="Phone ringtone" secondary="Titania" />
           </ListItem>
@@ -89,22 +90,8 @@ const ManageConference = ({
               secondary="Tethys"
             />
           </ListItem>
-        </List>
-        <BottomNavigation
-          showLabels
-          // value={value}
-          // onChange={(event, newValue) => {
-          //   setValue(newValue);
-          // }}
-          sx={{
-            mt: "auto",
-            borderTop: `1px solid ${theme.palette.grey[300]}`,
-          }}
-        >
-          <BottomNavigationAction label="Recents" icon={<AiOutlineClose />} />
-          <BottomNavigationAction label="Favorites" />
-          <BottomNavigationAction label="Nearby" />
-        </BottomNavigation>
+        </List> */}
+        <ConferenceNavigation />
       </Dialog>
     </div>
   );

@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DialogContentText, MenuItem } from "@mui/material";
-import useOrganisationSection from "../../../pages/plan/organisationSection/useOrganisationSection";
+import useOrganisation from "../../../hooks/useOrganisation";
 import useOrganisationStore from "../../../pages/plan/store/useOrganisationStore";
 import shallow from "zustand/shallow";
 
@@ -15,7 +15,7 @@ const DeleteOrganisationModal = ({
   modalClosedCallback: () => void;
 }) => {
   const { deleteOrganisationMutation, getCurrentSelectedOrganisation } =
-    useOrganisationSection();
+    useOrganisation();
   const selectedOrganisationId = useOrganisationStore(
     (state) => state.selectedOrganisationId,
     shallow

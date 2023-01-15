@@ -8,13 +8,12 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, SpeedDial } from "@mui/material";
 import { AiOutlinePlus } from "react-icons/ai";
-import useOrganisationSection from "../../../pages/plan/organisationSection/useOrganisationSection";
+import useOrganisation from "../../../hooks/useOrganisation";
 import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
 import useForm from "../../../pages/plan/hooks/useForm";
 
 const AddOrganisationModal = () => {
-  const { addOrganisationMutation, addValidationErrors } =
-    useOrganisationSection();
+  const { addOrganisationMutation, addValidationErrors } = useOrganisation();
   const { values, updateValues, clearValues } = useForm<{}>();
   const [open, setOpen] = useState(false);
 

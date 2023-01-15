@@ -11,13 +11,13 @@ import {
 import { CgOrganisation } from "react-icons/cg";
 import usePlanStore, { ViewEnum } from "../store/usePlanStore";
 import shallow from "zustand/shallow";
-import useOrganisationSection from "./useOrganisationSection";
+import useOrganisation from "../../../hooks/useOrganisation";
 import useOrganisationStore from "../store/useOrganisationStore";
 import AddOrganisationModal from "../../../components/modal/organisation/addOrganisationModal";
 
 const OrganisationSection = () => {
   const selectedView = usePlanStore((state) => state.selectedView, shallow);
-  const { organisations } = useOrganisationSection();
+  const { organisations } = useOrganisation();
   const organisationsList = organisations.data || [];
   const { setSelectedOrganisationId } = useOrganisationStore();
   const setSelectedView = usePlanStore(

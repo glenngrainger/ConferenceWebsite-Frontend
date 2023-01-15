@@ -4,14 +4,14 @@ import {
   deleteOrganisationCall,
   getOrganisationsCall,
   updateOrganisationCall,
-} from "../../../API/frontendCalls";
-import Organisation from "../../../models/Organisation";
-import useErrors from "../hooks/useErrors";
-import useOrganisationStore from "../store/useOrganisationStore";
+} from "../API/frontendCalls";
+import Organisation from "../models/Organisation";
+import useErrors from "../pages/plan/hooks/useErrors";
+import useOrganisationStore from "../pages/plan/store/useOrganisationStore";
 import { useSnackbar } from "notistack";
 import shallow from "zustand/shallow";
 
-const useOrganisationSection = () => {
+const useOrganisation = () => {
   const queryClient = useQueryClient();
   const addValidationErrors = useErrors();
   const updateValidationErrors = useErrors();
@@ -115,4 +115,4 @@ const useOrganisationSection = () => {
   } as const;
 };
 
-export default useOrganisationSection;
+export default useOrganisation;

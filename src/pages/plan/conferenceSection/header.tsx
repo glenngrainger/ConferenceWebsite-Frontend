@@ -1,6 +1,6 @@
 import { Box, Typography, Button, Menu, Divider } from "@mui/material";
 import { AiOutlineDown } from "react-icons/ai";
-import AddConferenceModal from "../../../components/modal/conference/addConferenceModal";
+import AddConferenceModal from "../../../components/modal/conference/addConference/addConferenceModal";
 import AdminAccessModal from "../../../components/modal/organisation/adminAccessModal";
 import DeleteOrganisationModal from "../../../components/modal/organisation/deleteOrganisationModal";
 import UpdateOrganisationModal from "../../../components/modal/organisation/updateOrganisationModal";

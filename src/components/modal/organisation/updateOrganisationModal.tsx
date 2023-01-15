@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, MenuItem } from "@mui/material";
-import useOrganisationSection from "../../../pages/plan/organisationSection/useOrganisationSection";
+import useOrganisation from "../../../hooks/useOrganisation";
 import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
 import useForm from "../../../pages/plan/hooks/useForm";
 
@@ -19,7 +19,7 @@ const UpdateOrganisationModal = ({
     updateOrganisationMutation,
     updateValidationErrors,
     getCurrentSelectedOrganisation,
-  } = useOrganisationSection();
+  } = useOrganisation();
   const { values, updateValues, clearValues, setAll } = useForm<{}>();
   const [open, setOpen] = useState(false);
 
