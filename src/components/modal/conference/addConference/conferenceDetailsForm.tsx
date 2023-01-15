@@ -1,5 +1,5 @@
 import { Box, TextField, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import shallow from "zustand/shallow";
 import useConference from "../../../../hooks/useConference";
 import useOrganisation from "../../../../hooks/useOrganisation";
@@ -21,20 +21,20 @@ const ConferenceDetailsForm = () => {
   const { getCurrentSelectedOrganisation } = useOrganisation();
   const currentOrganisation = getCurrentSelectedOrganisation();
 
+  const addConference = useCallback(async () => {
+    if (currentOrganisation !== undefined) {
+      const data = {
+        ...values,
+        organisationId: currentOrganisation?.id,
+      } as Conference;
+      await addConferenceMutation.mutateAsync(data);
+    }
+    createRequestFinished();
+  }, [currentOrganisation, values]);
+
   useEffect(() => {
-    console.log(values);
-    // Send request
     if (isCreateRequest) {
-      async () => {
-        if (currentOrganisation !== undefined) {
-          const data = {
-            ...values,
-            organisationId: currentOrganisation?.id,
-          } as Conference;
-          await addConferenceMutation.mutateAsync(data);
-        }
-        createRequestFinished();
-      };
+      addConference();
     }
   }, [isCreateRequest]);
 
