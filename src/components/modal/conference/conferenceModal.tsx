@@ -44,6 +44,7 @@ const ConferenceModal = ({
     isCurrentlyCreating,
     conference,
     setConference,
+    selectedNavTab,
   } = useConferenceModalStore(
     (state) => ({
       triggerAPIRequest: state.triggerAPIRequest,
@@ -55,12 +56,12 @@ const ConferenceModal = ({
       isCurrentlyCreating: state.isCurrentlyCreating,
       conference: state.conference,
       setConference: state.setConference,
+      selectedNavTab: state.selectedNavTab,
     }),
     shallow
   );
 
   useEffect(() => {
-    console.log(initialConference);
     setIsInitialCreate(isInitialCreate || false);
 
     // Set the conference if updating every time the modal is opened
@@ -104,8 +105,8 @@ const ConferenceModal = ({
             </Button>
           </Toolbar>
         </AppBar>
-        <ConferenceDetailsForm />
-        <ConferenceNavigation />
+        {selectedNavTab === "Details" && <ConferenceDetailsForm />}
+        {!isCurrentlyCreating && <ConferenceNavigation />}
       </Dialog>
     </>
   );

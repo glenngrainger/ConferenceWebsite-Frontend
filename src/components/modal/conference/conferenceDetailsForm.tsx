@@ -8,7 +8,7 @@ import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
 import useForm from "../../../pages/plan/hooks/useForm";
 import useConferenceModalStore from "./useConferenceModalStore";
 
-const ConferenceDetailsForm = () => {
+const ConferenceDetailsForm = ({ initialValues }: { initialValues: any }) => {
   const { values, updateValues, clearValues, setAll } = useForm<{}>();
   const { isAPIRequestInProgress, setAPIRequestFinished, isCurrentlyCreating } =
     useConferenceModalStore(

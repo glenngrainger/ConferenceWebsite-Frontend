@@ -7,6 +7,8 @@ import Conference from "../../../models/Conference";
 interface ConferenceModalState {
   isInitialCreate: boolean;
   setIsInitialCreate: (state: boolean) => void;
+  selectedNavTab: "Details" | "Scheduled" | "Documents";
+  setSelectedNavTab: (tab: "Details" | "Scheduled" | "Documents") => void;
   isCurrentlyCreating: boolean;
   setIsCurrentlyCreating: (state: boolean) => void;
   isOpen: boolean;
@@ -27,6 +29,8 @@ const createStore = () =>
     isInitialCreate: false,
     setIsInitialCreate: (state) =>
       set(() => ({ isInitialCreate: state, isCurrentlyCreating: state })),
+    selectedNavTab: "Details",
+    setSelectedNavTab: (tab) => set(() => ({ selectedNavTab: tab })),
     isCurrentlyCreating: false,
     setIsCurrentlyCreating: (state) =>
       set(() => ({ isCurrentlyCreating: state })),
@@ -37,6 +41,7 @@ const createStore = () =>
         isOpen: false,
         isCurrentlyCreating: prev.isInitialCreate,
         conference: undefined,
+        selectedNavTab: "Details",
       })),
     setIsOpen: (state) => set(() => ({ isOpen: state })),
     triggerAPIRequest: () => set(() => ({ isAPIRequestInProgress: true })),
