@@ -9,7 +9,9 @@ import useForm from "../../../pages/plan/hooks/useForm";
 import useConferenceModalStore from "./useConferenceModalStore";
 
 const ConferenceDetailsForm = ({ initialValues }: { initialValues: any }) => {
-  const { values, updateValues, clearValues, setAll } = useForm<{}>();
+  const { values, updateValues, clearValues, setAll } = useForm<{}>(
+    initialValues
+  );
   const { isAPIRequestInProgress, setAPIRequestFinished, isCurrentlyCreating } =
     useConferenceModalStore(
       (state) => ({

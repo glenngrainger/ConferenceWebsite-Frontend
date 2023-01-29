@@ -105,7 +105,9 @@ const ConferenceModal = ({
             </Button>
           </Toolbar>
         </AppBar>
-        {selectedNavTab === "Details" && <ConferenceDetailsForm />}
+        {selectedNavTab === "Details" && (
+          <ConferenceDetailsForm initialValues={conference || {}} />
+        )}
         {!isCurrentlyCreating && <ConferenceNavigation />}
       </Dialog>
     </>
