@@ -1,4 +1,5 @@
-import create from "zustand";
+import create, { StoreApi } from "zustand";
+import createContext from "zustand/context";
 
 interface ConferenceModalState {
   isOpen: boolean;
@@ -8,12 +9,23 @@ interface ConferenceModalState {
   isCreateRequest: boolean;
 }
 
-const useConferenceModalStore = create<ConferenceModalState>((set) => ({
-  isOpen: false,
-  setIsOpen: (state) => set(() => ({ isOpen: state })),
-  triggerCreateRequest: () => set(() => ({ isCreateRequest: true })),
-  createRequestFinished: () => set(() => ({ isCreateRequest: false })),
-  isCreateRequest: false,
-}));
+const { Provider, useStore } = createContext<StoreApi<ConferenceModalState>>();
 
-export default useConferenceModalStore;
+const createStore = () =>
+  create<ConferenceModalState>((set) => ({
+    isOpen: false,
+    setIsOpen: (state) => set(() => ({ isOpen: state })),
+    triggerCreateRequest: () => set(() => ({ isCreateRequest: true })),
+    createRequestFinished: () => set(() => ({ isCreateRequest: false })),
+    isCreateRequest: false,
+  }));
+
+export const ConferenceModalStateProvider = ({
+  children,
+}: {
+  children: any;
+}) => {
+  return <Provider createStore={createStore}>{children}</Provider>;
+};
+
+export default useStore;

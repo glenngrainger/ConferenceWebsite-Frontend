@@ -64,19 +64,14 @@ const OrganisationSection = () => {
           {organisationsList.map((organisation) => (
             <ListItem
               key={organisation.id}
-              disablePadding
-              sx={{
-                backgroundColor:
-                  organisation.id === selectedOrganisationId
-                    ? theme.palette.grey[200]
-                    : theme.palette.background,
-              }}
               onClick={() => {
                 setSelectedOrganisationId(organisation.id);
                 setSelectedView(ViewEnum.ConferenceHome);
               }}
             >
-              <ListItemButton>
+              <ListItemButton
+                selected={organisation.id === selectedOrganisationId}
+              >
                 <ListItemIcon>
                   <CgOrganisation />
                 </ListItemIcon>

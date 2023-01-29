@@ -13,7 +13,9 @@ import { useState } from "react";
 import ConferenceNavigation from "./conferenceNavigation";
 import ConferenceDetailsForm from "./conferenceDetailsForm";
 import useConference from "../../../../hooks/useConference";
-import useConferenceModalStore from "./useConferenceModalStore";
+import useConferenceModalStore, {
+  ConferenceModalStateProvider,
+} from "./useConferenceModalStore";
 import shallow from "zustand/shallow";
 
 const Transition = React.forwardRef(function Transition(
@@ -49,7 +51,7 @@ const ManageConference = ({
   };
 
   return (
-    <div>
+    <>
       <MenuItem
         onClick={() => {
           handleClickOpen();
@@ -82,21 +84,9 @@ const ManageConference = ({
           </Toolbar>
         </AppBar>
         <ConferenceDetailsForm />
-        {/* <List>
-          <ListItem button>
-            <ListItemText primary="Phone ringtone" secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem button>
-            <ListItemText
-              primary="Default notification ringtone"
-              secondary="Tethys"
-            />
-          </ListItem>
-        </List> */}
         <ConferenceNavigation />
       </Dialog>
-    </div>
+    </>
   );
 };
 

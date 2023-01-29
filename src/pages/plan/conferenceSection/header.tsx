@@ -1,6 +1,7 @@
 import { Box, Typography, Button, Menu, Divider } from "@mui/material";
 import { AiOutlineDown } from "react-icons/ai";
 import AddConferenceModal from "../../../components/modal/conference/addConference/addConferenceModal";
+import { ConferenceModalStateProvider } from "../../../components/modal/conference/addConference/useConferenceModalStore";
 import AdminAccessModal from "../../../components/modal/organisation/adminAccessModal";
 import DeleteOrganisationModal from "../../../components/modal/organisation/deleteOrganisationModal";
 import UpdateOrganisationModal from "../../../components/modal/organisation/updateOrganisationModal";
@@ -53,7 +54,9 @@ const ManageOrganisationMenu = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <AddConferenceModal modalClosedCallback={handleClose} />
+        <ConferenceModalStateProvider>
+          <AddConferenceModal modalClosedCallback={handleClose} />
+        </ConferenceModalStateProvider>
         <Divider />
         <UpdateOrganisationModal modalClosedCallback={handleClose} />
         <DeleteOrganisationModal modalClosedCallback={handleClose} />
