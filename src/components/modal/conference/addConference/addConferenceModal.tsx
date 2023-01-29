@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -9,13 +9,9 @@ import { AiOutlineClose } from "react-icons/ai";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { MenuItem } from "@mui/material";
-import { useState } from "react";
 import ConferenceNavigation from "./conferenceNavigation";
 import ConferenceDetailsForm from "./conferenceDetailsForm";
-import useConference from "../../../../hooks/useConference";
-import useConferenceModalStore, {
-  ConferenceModalStateProvider,
-} from "./useConferenceModalStore";
+import useConferenceModalStore from "./useConferenceModalStore";
 import shallow from "zustand/shallow";
 
 const Transition = React.forwardRef(function Transition(
@@ -29,40 +25,40 @@ const Transition = React.forwardRef(function Transition(
 
 const ManageConference = ({
   modalClosedCallback,
+  isInitialCreate,
 }: {
   modalClosedCallback: () => void;
+  isInitialCreate?: boolean;
 }) => {
-  const { triggerCreateRequest, isOpen, setIsOpen } = useConferenceModalStore(
+  const {
+    triggerCreateAPIRequest,
+    isOpen,
+    openModal,
+    closeModal,
+    setIsInitialCreate,
+  } = useConferenceModalStore(
     (state) => ({
-      triggerCreateRequest: state.triggerCreateRequest,
+      triggerCreateAPIRequest: state.triggerCreateAPIRequest,
       isOpen: state.isOpen,
+      openModal: state.openModal,
+      closeModal: state.closeModal,
       setIsOpen: state.setIsOpen,
+      setIsInitialCreate: state.setIsInitialCreate,
     }),
     shallow
   );
 
-  const handleClickOpen = () => {
-    setIsOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-    modalClosedCallback();
-  };
+  useEffect(() => {
+    setIsInitialCreate(isInitialCreate || false);
+  }, []);
 
   return (
     <>
-      <MenuItem
-        onClick={() => {
-          handleClickOpen();
-        }}
-      >
-        New Conference
-      </MenuItem>
+      <MenuItem onClick={openModal}>New Conference</MenuItem>
       <Dialog
         fullScreen
         open={isOpen}
-        onClose={handleClose}
+        onClose={closeModal}
         TransitionComponent={Transition}
       >
         <AppBar sx={{ position: "relative" }}>
@@ -70,7 +66,7 @@ const ManageConference = ({
             <IconButton
               edge="start"
               color="inherit"
-              onClick={handleClose}
+              onClick={closeModal}
               aria-label="close"
             >
               <AiOutlineClose />
@@ -78,7 +74,7 @@ const ManageConference = ({
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               New Conference
             </Typography>
-            <Button autoFocus color="inherit" onClick={triggerCreateRequest}>
+            <Button autoFocus color="inherit" onClick={triggerCreateAPIRequest}>
               Create
             </Button>
           </Toolbar>

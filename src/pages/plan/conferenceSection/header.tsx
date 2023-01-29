@@ -55,7 +55,10 @@ const ManageOrganisationMenu = () => {
         }}
       >
         <ConferenceModalStateProvider>
-          <AddConferenceModal modalClosedCallback={handleClose} />
+          <AddConferenceModal
+            modalClosedCallback={handleClose}
+            isInitialCreate={true}
+          />
         </ConferenceModalStateProvider>
         <Divider />
         <UpdateOrganisationModal modalClosedCallback={handleClose} />
