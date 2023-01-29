@@ -10,11 +10,11 @@ import useConferenceModalStore from "./useConferenceModalStore";
 
 const ConferenceDetailsForm = () => {
   const { values, updateValues, clearValues } = useForm<{}>();
-  const { isCreateAPIRequestInProgress, createAPIRequestFinished } =
+  const { isAPIRequestInProgress, setAPIRequestFinished } =
     useConferenceModalStore(
       (state) => ({
-        isCreateAPIRequestInProgress: state.isCreateAPIRequestInProgress,
-        createAPIRequestFinished: state.createAPIRequestFinished,
+        isAPIRequestInProgress: state.isAPIRequestInProgress,
+        setAPIRequestFinished: state.setAPIRequestFinished,
       }),
       shallow
     );
@@ -23,21 +23,22 @@ const ConferenceDetailsForm = () => {
   const currentOrganisation = getCurrentSelectedOrganisation();
 
   const addConference = useCallback(async () => {
+    let result = undefined;
     if (currentOrganisation !== undefined) {
       const data = {
         ...values,
         organisationId: currentOrganisation?.id,
       } as Conference;
-      await addConferenceMutation.mutateAsync(data);
+      result = await addConferenceMutation.mutateAsync(data);
     }
-    createAPIRequestFinished();
+    setAPIRequestFinished(result);
   }, [currentOrganisation, values]);
 
   useEffect(() => {
-    if (isCreateAPIRequestInProgress) {
+    if (isAPIRequestInProgress) {
       addConference();
     }
-  }, [isCreateAPIRequestInProgress]);
+  }, [isAPIRequestInProgress]);
 
   return (
     <Box component="form" sx={{ p: 2 }}>

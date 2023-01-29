@@ -2,6 +2,7 @@ import create, { StoreApi } from "zustand";
 import createContext from "zustand/context";
 import { subscribeWithSelector } from "zustand/middleware";
 import { Errors } from "../../../../models/APIErrorModel";
+import Conference from "../../../../models/Conference";
 
 interface ConferenceModalState {
   isInitialCreate: boolean;
@@ -12,9 +13,11 @@ interface ConferenceModalState {
   openModal: () => void;
   closeModal: () => void;
   setIsOpen: (state: boolean) => void;
-  triggerCreateAPIRequest: () => void;
-  createAPIRequestFinished: () => void;
-  isCreateAPIRequestInProgress: boolean;
+  triggerAPIRequest: () => void;
+  setAPIRequestFinished: (conference: Conference | undefined) => void;
+  isAPIRequestInProgress: boolean;
+  conference: Conference | undefined;
+  setConference: (conference: Conference) => void;
 }
 
 const { Provider, useStore } = createContext<StoreApi<ConferenceModalState>>();
@@ -35,11 +38,19 @@ const createStore = () =>
         isCurrentlyCreating: prev.isInitialCreate,
       })),
     setIsOpen: (state) => set(() => ({ isOpen: state })),
-    triggerCreateAPIRequest: () =>
-      set(() => ({ isCreateAPIRequestInProgress: true })),
-    createAPIRequestFinished: () =>
-      set(() => ({ isCreateAPIRequestInProgress: false })),
-    isCreateAPIRequestInProgress: false,
+    triggerAPIRequest: () => set(() => ({ isAPIRequestInProgress: true })),
+    setAPIRequestFinished: (result) =>
+      set((prev) => ({
+        isCreateAPIRequestInProgress: false,
+        isCurrentlyCreating:
+          prev.isCurrentlyCreating && result !== undefined
+            ? false
+            : prev.isCurrentlyCreating,
+        conference: result !== undefined ? result : prev.conference,
+      })),
+    isAPIRequestInProgress: false,
+    conference: undefined,
+    setConference: (conference) => set(() => ({ conference })),
   }));
 
 export const ConferenceModalStateProvider = ({

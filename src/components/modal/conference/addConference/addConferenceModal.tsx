@@ -31,19 +31,23 @@ const ManageConference = ({
   isInitialCreate?: boolean;
 }) => {
   const {
-    triggerCreateAPIRequest,
+    triggerAPIRequest,
     isOpen,
     openModal,
     closeModal,
     setIsInitialCreate,
+    isCurrentlyCreating,
+    conference,
   } = useConferenceModalStore(
     (state) => ({
-      triggerCreateAPIRequest: state.triggerCreateAPIRequest,
+      triggerAPIRequest: state.triggerAPIRequest,
       isOpen: state.isOpen,
       openModal: state.openModal,
       closeModal: state.closeModal,
       setIsOpen: state.setIsOpen,
       setIsInitialCreate: state.setIsInitialCreate,
+      isCurrentlyCreating: state.isCurrentlyCreating,
+      conference: state.conference,
     }),
     shallow
   );
@@ -52,9 +56,17 @@ const ManageConference = ({
     setIsInitialCreate(isInitialCreate || false);
   }, []);
 
+  useEffect(() => {
+    // Set the conference if updating every time the modal is opened
+    if (isOpen) {
+    }
+  }, [isOpen]);
+
   return (
     <>
-      <MenuItem onClick={openModal}>New Conference</MenuItem>
+      <MenuItem onClick={openModal}>
+        {isCurrentlyCreating ? "New Conference" : ""}
+      </MenuItem>
       <Dialog
         fullScreen
         open={isOpen}
@@ -72,10 +84,10 @@ const ManageConference = ({
               <AiOutlineClose />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              New Conference
+              {isCurrentlyCreating ? "New Conference" : conference?.name}
             </Typography>
-            <Button autoFocus color="inherit" onClick={triggerCreateAPIRequest}>
-              Create
+            <Button autoFocus color="inherit" onClick={triggerAPIRequest}>
+              {isCurrentlyCreating ? "Create" : "Save"}
             </Button>
           </Toolbar>
         </AppBar>
