@@ -7,7 +7,6 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { CgOrganisation } from "react-icons/cg";
 import usePlanStore, { ViewEnum } from "../store/usePlanStore";
@@ -17,7 +16,6 @@ import useOrganisationStore from "../store/useOrganisationStore";
 import AddOrganisationModal from "../../../components/modal/organisation/addOrganisationModal";
 
 const OrganisationSection = () => {
-  const theme = useTheme();
   const selectedView = usePlanStore((state) => state.selectedView, shallow);
   const { organisations } = useOrganisation();
   const organisationsList = organisations.data || [];
@@ -50,7 +48,7 @@ const OrganisationSection = () => {
           position: "absolute",
           borderRight: 1,
           borderColor: "grey.300",
-          overflowY: "auto",
+          overflowX: "auto",
         }}
       >
         <Divider sx={{ mt: 2 }}>Organisations</Divider>

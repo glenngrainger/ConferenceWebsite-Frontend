@@ -1,16 +1,16 @@
 import {
-  Avatar,
   Card,
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia,
   IconButton,
   Typography,
   Button,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import ConferenceModal from "../../../components/modal/conference/conferenceModal";
+import { ConferenceModalStateProvider } from "../../../components/modal/conference/useConferenceModalStore";
 import useConference from "../../../hooks/useConference";
 
 const ConferenceSectionGrid = () => {
@@ -59,9 +59,14 @@ const ConferenceSectionGrid = () => {
                   {conference.summary}
                 </Typography>
               </CardContent>
-              <CardActions disableSpacing>
-                <Button size="small">Schedule</Button>
-              </CardActions>
+              <ConferenceModalStateProvider>
+                <ConferenceModal
+                  modalClosedCallback={() => {}}
+                  openType="grid"
+                  initialConference={conference}
+                  isInitialCreate={false}
+                />
+              </ConferenceModalStateProvider>
             </Card>
           </Grid>
         );

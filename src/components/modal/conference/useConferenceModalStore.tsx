@@ -1,8 +1,8 @@
 import create, { StoreApi } from "zustand";
 import createContext from "zustand/context";
 import { subscribeWithSelector } from "zustand/middleware";
-import { Errors } from "../../../../models/APIErrorModel";
-import Conference from "../../../../models/Conference";
+import { Errors } from "../../../models/APIErrorModel";
+import Conference from "../../../models/Conference";
 
 interface ConferenceModalState {
   isInitialCreate: boolean;
@@ -26,7 +26,7 @@ const createStore = () =>
   create<ConferenceModalState>((set) => ({
     isInitialCreate: false,
     setIsInitialCreate: (state) =>
-      set(() => ({ isInitialCreate: state, isCurrentlyCreating: true })),
+      set(() => ({ isInitialCreate: state, isCurrentlyCreating: state })),
     isCurrentlyCreating: false,
     setIsCurrentlyCreating: (state) =>
       set(() => ({ isCurrentlyCreating: state })),
@@ -36,6 +36,7 @@ const createStore = () =>
       set((prev) => ({
         isOpen: false,
         isCurrentlyCreating: prev.isInitialCreate,
+        conference: undefined,
       })),
     setIsOpen: (state) => set(() => ({ isOpen: state })),
     triggerAPIRequest: () => set(() => ({ isAPIRequestInProgress: true })),

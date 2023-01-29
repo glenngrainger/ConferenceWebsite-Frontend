@@ -1,20 +1,21 @@
 import { Box, TextField, Typography } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import shallow from "zustand/shallow";
-import useConference from "../../../../hooks/useConference";
-import useOrganisation from "../../../../hooks/useOrganisation";
-import Conference from "../../../../models/Conference";
-import { ReturnErrorProps } from "../../../../pages/plan/hooks/useErrors";
-import useForm from "../../../../pages/plan/hooks/useForm";
+import useConference from "../../../hooks/useConference";
+import useOrganisation from "../../../hooks/useOrganisation";
+import Conference from "../../../models/Conference";
+import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
+import useForm from "../../../pages/plan/hooks/useForm";
 import useConferenceModalStore from "./useConferenceModalStore";
 
 const ConferenceDetailsForm = () => {
-  const { values, updateValues, clearValues } = useForm<{}>();
-  const { isAPIRequestInProgress, setAPIRequestFinished } =
+  const { values, updateValues, clearValues, setAll } = useForm<{}>();
+  const { isAPIRequestInProgress, setAPIRequestFinished, isCurrentlyCreating } =
     useConferenceModalStore(
       (state) => ({
         isAPIRequestInProgress: state.isAPIRequestInProgress,
         setAPIRequestFinished: state.setAPIRequestFinished,
+        isCurrentlyCreating: state.isCurrentlyCreating,
       }),
       shallow
     );
@@ -32,6 +33,9 @@ const ConferenceDetailsForm = () => {
       result = await addConferenceMutation.mutateAsync(data);
     }
     setAPIRequestFinished(result);
+    if (isCurrentlyCreating && result !== undefined) {
+      setAll(result);
+    }
   }, [currentOrganisation, values]);
 
   useEffect(() => {
@@ -67,10 +71,12 @@ const ConferenceDetailsForm = () => {
         onChange={(e) => updateValues("summary", e.target.value)}
         {...ReturnErrorProps("Summary", addValidationErrors.validationErrors)}
       />
-      <Typography variant="body1" sx={{}}>
-        Conference will be added to {currentOrganisation?.name}. Conferences can
-        be scheduled after adding details
-      </Typography>
+      {isCurrentlyCreating && (
+        <Typography variant="body1">
+          Conference will be added to {currentOrganisation?.name}. Conferences
+          can be scheduled after adding details
+        </Typography>
+      )}
     </Box>
   );
 };

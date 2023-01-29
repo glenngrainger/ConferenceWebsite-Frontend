@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -8,11 +8,12 @@ import Typography from "@mui/material/Typography";
 import { AiOutlineClose } from "react-icons/ai";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { MenuItem } from "@mui/material";
+import { CardActions, MenuItem } from "@mui/material";
 import ConferenceNavigation from "./conferenceNavigation";
 import ConferenceDetailsForm from "./conferenceDetailsForm";
 import useConferenceModalStore from "./useConferenceModalStore";
 import shallow from "zustand/shallow";
+import Conference from "../../../models/Conference";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -23,12 +24,16 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ManageConference = ({
+const ConferenceModal = ({
+  openType,
   modalClosedCallback,
   isInitialCreate,
+  initialConference,
 }: {
   modalClosedCallback: () => void;
   isInitialCreate?: boolean;
+  openType?: string;
+  initialConference?: Conference | undefined;
 }) => {
   const {
     triggerAPIRequest,
@@ -38,6 +43,7 @@ const ManageConference = ({
     setIsInitialCreate,
     isCurrentlyCreating,
     conference,
+    setConference,
   } = useConferenceModalStore(
     (state) => ({
       triggerAPIRequest: state.triggerAPIRequest,
@@ -48,25 +54,32 @@ const ManageConference = ({
       setIsInitialCreate: state.setIsInitialCreate,
       isCurrentlyCreating: state.isCurrentlyCreating,
       conference: state.conference,
+      setConference: state.setConference,
     }),
     shallow
   );
 
   useEffect(() => {
+    console.log(initialConference);
     setIsInitialCreate(isInitialCreate || false);
-  }, []);
 
-  useEffect(() => {
     // Set the conference if updating every time the modal is opened
-    if (isOpen) {
+    if (!isInitialCreate && initialConference !== undefined) {
+      setConference(initialConference);
     }
   }, [isOpen]);
 
   return (
     <>
-      <MenuItem onClick={openModal}>
-        {isCurrentlyCreating ? "New Conference" : ""}
-      </MenuItem>
+      {openType === "grid" ? (
+        <CardActions disableSpacing>
+          <Button size="small" onClick={openModal}>
+            Schedule
+          </Button>
+        </CardActions>
+      ) : (
+        <MenuItem onClick={openModal}>New Conference</MenuItem>
+      )}
       <Dialog
         fullScreen
         open={isOpen}
@@ -98,4 +111,4 @@ const ManageConference = ({
   );
 };
 
-export default ManageConference;
+export default ConferenceModal;

@@ -1,7 +1,7 @@
 import { Box, Typography, Button, Menu, Divider } from "@mui/material";
 import { AiOutlineDown } from "react-icons/ai";
-import AddConferenceModal from "../../../components/modal/conference/addConference/addConferenceModal";
-import { ConferenceModalStateProvider } from "../../../components/modal/conference/addConference/useConferenceModalStore";
+import ConferenceModal from "../../../components/modal/conference/conferenceModal";
+import { ConferenceModalStateProvider } from "../../../components/modal/conference/useConferenceModalStore";
 import AdminAccessModal from "../../../components/modal/organisation/adminAccessModal";
 import DeleteOrganisationModal from "../../../components/modal/organisation/deleteOrganisationModal";
 import UpdateOrganisationModal from "../../../components/modal/organisation/updateOrganisationModal";
@@ -22,7 +22,6 @@ const ConferenceSectionHeader = () => {
         {conferences?.data?.length || 0} Conferences
       </Typography>
       <Box sx={{ display: "flex", gap: "12px", ml: "auto" }}>
-        {/* <Button>New Conference</Button> */}
         <ManageOrganisationMenu />
       </Box>
     </Box>
@@ -55,7 +54,7 @@ const ManageOrganisationMenu = () => {
         }}
       >
         <ConferenceModalStateProvider>
-          <AddConferenceModal
+          <ConferenceModal
             modalClosedCallback={handleClose}
             isInitialCreate={true}
           />
