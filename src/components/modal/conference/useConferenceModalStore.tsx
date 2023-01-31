@@ -1,7 +1,5 @@
 import create, { Mutate, StoreApi } from "zustand";
 import createContext from "zustand/context";
-import { subscribeWithSelector } from "zustand/middleware";
-import { Errors } from "../../../models/APIErrorModel";
 import Conference from "../../../models/Conference";
 
 export interface ConferenceModalState {
@@ -15,9 +13,6 @@ export interface ConferenceModalState {
   openModal: () => void;
   closeModal: () => void;
   setIsOpen: (state: boolean) => void;
-  triggerAPIRequest: () => void;
-  setAPIRequestFinished: (conference: Conference | undefined) => void;
-  isAPIRequestInProgress: boolean;
   conference: Conference | undefined;
   setConference: (conference: Conference) => void;
 }
@@ -44,19 +39,9 @@ const createStore = () =>
         selectedNavTab: "Details",
       })),
     setIsOpen: (state) => set(() => ({ isOpen: state })),
-    triggerAPIRequest: () => set(() => ({ isAPIRequestInProgress: true })),
-    setAPIRequestFinished: (result) =>
-      set((prev) => ({
-        isCreateAPIRequestInProgress: false,
-        isCurrentlyCreating:
-          prev.isCurrentlyCreating && result !== undefined
-            ? false
-            : prev.isCurrentlyCreating,
-        conference: result !== undefined ? result : prev.conference,
-      })),
-    isAPIRequestInProgress: false,
     conference: undefined,
-    setConference: (conference) => set(() => ({ conference })),
+    setConference: (conference) =>
+      set(() => ({ conference, isCurrentlyCreating: false })),
   }));
 
 export const ConferenceModalStateProvider = ({

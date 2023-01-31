@@ -40,7 +40,6 @@ const ConferenceModal = ({
   const formRef = useRef<AddConferenceHandle>(null);
 
   const {
-    triggerAPIRequest,
     isOpen,
     openModal,
     closeModal,
@@ -51,7 +50,6 @@ const ConferenceModal = ({
     selectedNavTab,
   } = useConferenceModalStore(
     (state) => ({
-      triggerAPIRequest: state.triggerAPIRequest,
       isOpen: state.isOpen,
       openModal: state.openModal,
       closeModal: state.closeModal,

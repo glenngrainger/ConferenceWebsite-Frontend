@@ -27,15 +27,10 @@ const ConferenceDetailsForm = forwardRef<AddConferenceHandle, Props>(
     const { values, updateValues, clearValues, setAll } = useForm<{}>(
       initialValues
     );
-    const {
-      isAPIRequestInProgress,
-      setAPIRequestFinished,
-      isCurrentlyCreating,
-    } = useConferenceModalStore(
+    const { isCurrentlyCreating, setConference } = useConferenceModalStore(
       (state) => ({
-        isAPIRequestInProgress: state.isAPIRequestInProgress,
-        setAPIRequestFinished: state.setAPIRequestFinished,
         isCurrentlyCreating: state.isCurrentlyCreating,
+        setConference: state.setConference,
       }),
       shallow
     );
@@ -52,7 +47,9 @@ const ConferenceDetailsForm = forwardRef<AddConferenceHandle, Props>(
         } as Conference;
         result = await addConferenceMutation.mutateAsync(data);
       }
-      setAPIRequestFinished(result);
+      if (result !== undefined) {
+        setConference(result);
+      }
       if (isCurrentlyCreating && result !== undefined) {
         setAll(result);
       }
