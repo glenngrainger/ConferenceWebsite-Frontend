@@ -10,7 +10,9 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { CardActions, MenuItem } from "@mui/material";
 import ConferenceNavigation from "./conferenceNavigation";
-import ConferenceDetailsForm from "./conferenceDetailsForm";
+import ConferenceDetailsForm, {
+  AddConferenceHandle,
+} from "./conferenceDetailsForm";
 import useConferenceModalStore from "./useConferenceModalStore";
 import shallow from "zustand/shallow";
 import Conference from "../../../models/Conference";
@@ -35,6 +37,8 @@ const ConferenceModal = ({
   openType?: string;
   initialConference?: Conference | undefined;
 }) => {
+  const formRef = useRef<AddConferenceHandle>(null);
+
   const {
     triggerAPIRequest,
     isOpen,
@@ -100,13 +104,21 @@ const ConferenceModal = ({
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               {isCurrentlyCreating ? "New Conference" : conference?.name}
             </Typography>
-            <Button autoFocus color="inherit" onClick={triggerAPIRequest}>
+            <Button
+              autoFocus
+              color="inherit"
+              onClick={() => formRef?.current?.addConference()}
+            >
+              {/* <Button autoFocus color="inherit" onClick={triggerAPIRequest}> */}
               {isCurrentlyCreating ? "Create" : "Save"}
             </Button>
           </Toolbar>
         </AppBar>
         {selectedNavTab === "Details" && (
-          <ConferenceDetailsForm initialValues={conference || {}} />
+          <ConferenceDetailsForm
+            ref={formRef}
+            initialValues={conference || {}}
+          />
         )}
         {!isCurrentlyCreating && <ConferenceNavigation />}
       </Dialog>

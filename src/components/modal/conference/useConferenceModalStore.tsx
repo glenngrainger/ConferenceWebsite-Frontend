@@ -1,10 +1,10 @@
-import create, { StoreApi } from "zustand";
+import create, { Mutate, StoreApi } from "zustand";
 import createContext from "zustand/context";
 import { subscribeWithSelector } from "zustand/middleware";
 import { Errors } from "../../../models/APIErrorModel";
 import Conference from "../../../models/Conference";
 
-interface ConferenceModalState {
+export interface ConferenceModalState {
   isInitialCreate: boolean;
   setIsInitialCreate: (state: boolean) => void;
   selectedNavTab: "Details" | "Scheduled" | "Documents";
