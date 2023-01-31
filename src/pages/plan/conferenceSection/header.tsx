@@ -1,4 +1,12 @@
-import { Box, Typography, Button, Menu, Divider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Menu,
+  Divider,
+  MenuItem,
+} from "@mui/material";
+import { useRef } from "react";
 import { AiOutlineDown } from "react-icons/ai";
 import ConferenceModal from "../../../components/modal/conference/conferenceModal";
 import { ConferenceModalStateProvider } from "../../../components/modal/conference/useConferenceModalStore";
@@ -29,6 +37,7 @@ const ConferenceSectionHeader = () => {
 };
 
 const ManageOrganisationMenu = () => {
+  const conferenceModalRef = useRef(null);
   const { open, anchorEl, handleClick, handleClose } = useMenu();
   return (
     <>
@@ -53,8 +62,10 @@ const ManageOrganisationMenu = () => {
           "aria-labelledby": "basic-button",
         }}
       >
+        <MenuItem ref={conferenceModalRef}>New Conference</MenuItem>
         <ConferenceModalStateProvider>
           <ConferenceModal
+            ref={conferenceModalRef}
             modalClosedCallback={handleClose}
             isInitialCreate={true}
           />

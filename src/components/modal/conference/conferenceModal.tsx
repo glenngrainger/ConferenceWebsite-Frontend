@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -26,102 +26,111 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ConferenceModal = ({
-  openType,
-  modalClosedCallback,
-  isInitialCreate,
-  initialConference,
-}: {
+type ConferenceModalProps = {
   modalClosedCallback: () => void;
   isInitialCreate?: boolean;
-  openType?: string;
   initialConference?: Conference | undefined;
-}) => {
-  const formRef = useRef<AddConferenceHandle>(null);
-
-  const {
-    isOpen,
-    openModal,
-    closeModal,
-    setIsInitialCreate,
-    isCurrentlyCreating,
-    conference,
-    setConference,
-    selectedNavTab,
-  } = useConferenceModalStore(
-    (state) => ({
-      isOpen: state.isOpen,
-      openModal: state.openModal,
-      closeModal: state.closeModal,
-      setIsOpen: state.setIsOpen,
-      setIsInitialCreate: state.setIsInitialCreate,
-      isCurrentlyCreating: state.isCurrentlyCreating,
-      conference: state.conference,
-      setConference: state.setConference,
-      selectedNavTab: state.selectedNavTab,
-    }),
-    shallow
-  );
-
-  useEffect(() => {
-    setIsInitialCreate(isInitialCreate || false);
-
-    // Set the conference if updating every time the modal is opened
-    if (!isInitialCreate && initialConference !== undefined) {
-      setConference(initialConference);
-    }
-  }, [isOpen]);
-
-  return (
-    <>
-      {openType === "grid" ? (
-        <CardActions disableSpacing>
-          <Button size="small" onClick={openModal}>
-            Schedule
-          </Button>
-        </CardActions>
-      ) : (
-        <MenuItem onClick={openModal}>New Conference</MenuItem>
-      )}
-      <Dialog
-        fullScreen
-        open={isOpen}
-        onClose={closeModal}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={closeModal}
-              aria-label="close"
-            >
-              <AiOutlineClose />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {isCurrentlyCreating ? "New Conference" : conference?.name}
-            </Typography>
-            <Button
-              autoFocus
-              color="inherit"
-              onClick={() => formRef?.current?.addConference()}
-            >
-              {/* <Button autoFocus color="inherit" onClick={triggerAPIRequest}> */}
-              {isCurrentlyCreating ? "Create" : "Save"}
-            </Button>
-          </Toolbar>
-        </AppBar>
-        {selectedNavTab === "Details" && (
-          <ConferenceDetailsForm
-            ref={formRef}
-            initialValues={conference || {}}
-          />
-        )}
-        {!isCurrentlyCreating && <ConferenceNavigation />}
-      </Dialog>
-    </>
-  );
 };
+
+const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
+  (
+    { modalClosedCallback, isInitialCreate, initialConference },
+    modalTriggerRef
+  ) => {
+    const formRef = useRef<AddConferenceHandle>(null);
+
+    const {
+      isOpen,
+      openModal,
+      closeModal,
+      setIsInitialCreate,
+      isCurrentlyCreating,
+      conference,
+      setConference,
+      selectedNavTab,
+    } = useConferenceModalStore(
+      (state) => ({
+        isOpen: state.isOpen,
+        openModal: state.openModal,
+        closeModal: state.closeModal,
+        setIsOpen: state.setIsOpen,
+        setIsInitialCreate: state.setIsInitialCreate,
+        isCurrentlyCreating: state.isCurrentlyCreating,
+        conference: state.conference,
+        setConference: state.setConference,
+        selectedNavTab: state.selectedNavTab,
+      }),
+      shallow
+    );
+
+    useEffect(() => {
+      setIsInitialCreate(isInitialCreate || false);
+
+      // Set the conference if updating every time the modal is opened
+      if (!isInitialCreate && initialConference !== undefined) {
+        setConference(initialConference);
+      }
+    }, [isOpen]);
+
+    const refClickedHandler = () => {
+      openModal();
+    };
+
+    useEffect(() => {
+      // Type issue - will need to look into this
+      const ref = modalTriggerRef as React.RefObject<HTMLElement>;
+      if (ref !== null) {
+        ref.current?.addEventListener("click", refClickedHandler);
+      }
+      return () => {
+        if (ref !== null) {
+          ref.current?.removeEventListener("click", refClickedHandler);
+        }
+      };
+    }, []);
+
+    return (
+      <>
+        <Dialog
+          fullScreen
+          open={isOpen}
+          onClose={closeModal}
+          TransitionComponent={Transition}
+        >
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={closeModal}
+                aria-label="close"
+              >
+                <AiOutlineClose />
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                {isCurrentlyCreating ? "New Conference" : conference?.name}
+              </Typography>
+              <Button
+                autoFocus
+                color="inherit"
+                onClick={() => formRef?.current?.addConference()}
+              >
+                {/* <Button autoFocus color="inherit" onClick={triggerAPIRequest}> */}
+                {isCurrentlyCreating ? "Create" : "Save"}
+              </Button>
+            </Toolbar>
+          </AppBar>
+          {selectedNavTab === "Details" && (
+            <ConferenceDetailsForm
+              ref={formRef}
+              initialValues={conference || {}}
+            />
+          )}
+          {!isCurrentlyCreating && <ConferenceNavigation />}
+        </Dialog>
+      </>
+    );
+  }
+);
 
 export default ConferenceModal;
