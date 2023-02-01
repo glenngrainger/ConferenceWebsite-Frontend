@@ -63,16 +63,20 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
       shallow
     );
 
-    useEffect(() => {
+    // Need to rethink this
+    // useEffect(() => {
+    //   if (!isOpen) {
+    //     modalClosedCallback();
+    //   }
+    // }, [isOpen]);
+
+    const refOpenClickedHandler = () => {
       setIsInitialCreate(isInitialCreate || false);
 
       // Set the conference if updating every time the modal is opened
       if (!isInitialCreate && initialConference !== undefined) {
         setConference(initialConference);
       }
-    }, [isOpen]);
-
-    const refClickedHandler = () => {
       openModal();
     };
 
@@ -80,11 +84,11 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
       // Type issue - will need to look into this
       const ref = modalTriggerRef as React.RefObject<HTMLElement>;
       if (ref !== null) {
-        ref.current?.addEventListener("click", refClickedHandler);
+        ref.current?.addEventListener("click", refOpenClickedHandler);
       }
       return () => {
         if (ref !== null) {
-          ref.current?.removeEventListener("click", refClickedHandler);
+          ref.current?.removeEventListener("click", refOpenClickedHandler);
         }
       };
     }, []);
@@ -113,7 +117,7 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
               <Button
                 autoFocus
                 color="inherit"
-                onClick={() => formRef?.current?.addConference()}
+                onClick={() => formRef?.current?.triggerSave()}
               >
                 {/* <Button autoFocus color="inherit" onClick={triggerAPIRequest}> */}
                 {isCurrentlyCreating ? "Create" : "Save"}

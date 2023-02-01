@@ -9,7 +9,7 @@ import useForm from "../../../pages/plan/hooks/useForm";
 import useConferenceModalStore from "./useConferenceModalStore";
 
 export type AddConferenceHandle = {
-  addConference: () => void;
+  triggerSave: () => void;
 };
 
 type Props = {
@@ -18,12 +18,6 @@ type Props = {
 
 const ConferenceDetailsForm = forwardRef<AddConferenceHandle, Props>(
   ({ initialValues }, ref) => {
-    useImperativeHandle(ref, () => ({
-      async addConference() {
-        await addConference();
-      },
-    }));
-
     const { values, updateValues, clearValues, setAll } = useForm<{}>(
       initialValues
     );
@@ -34,9 +28,33 @@ const ConferenceDetailsForm = forwardRef<AddConferenceHandle, Props>(
       }),
       shallow
     );
-    const { addConferenceMutation, addValidationErrors } = useConference();
+    const {
+      addConferenceMutation,
+      updateConferenceMutation,
+      validationErrors,
+    } = useConference();
     const { getCurrentSelectedOrganisation } = useOrganisation();
     const currentOrganisation = getCurrentSelectedOrganisation();
+
+    useImperativeHandle(ref, () => ({
+      async triggerSave() {
+        if (isCurrentlyCreating) {
+          await addConference();
+        } else {
+          await updateConference();
+        }
+      },
+    }));
+
+    const updateConference = async () => {
+      const result = await updateConferenceMutation.mutateAsync(
+        values as Conference
+      );
+
+      if (result !== undefined) {
+        setConference(result);
+      }
+    };
 
     const addConference = async () => {
       let result = undefined;
@@ -49,8 +67,6 @@ const ConferenceDetailsForm = forwardRef<AddConferenceHandle, Props>(
       }
       if (result !== undefined) {
         setConference(result);
-      }
-      if (isCurrentlyCreating && result !== undefined) {
         setAll(result);
       }
     };
@@ -66,7 +82,7 @@ const ConferenceDetailsForm = forwardRef<AddConferenceHandle, Props>(
           fullWidth
           variant="standard"
           onChange={(e) => updateValues("name", e.target.value)}
-          {...ReturnErrorProps("Name", addValidationErrors.validationErrors)}
+          {...ReturnErrorProps("Name", validationErrors.validationErrors)}
         />
         <TextField
           value={values["summary"] || ""}
@@ -79,7 +95,7 @@ const ConferenceDetailsForm = forwardRef<AddConferenceHandle, Props>(
           rows={4}
           variant="standard"
           onChange={(e) => updateValues("summary", e.target.value)}
-          {...ReturnErrorProps("Summary", addValidationErrors.validationErrors)}
+          {...ReturnErrorProps("Summary", validationErrors.validationErrors)}
         />
         {isCurrentlyCreating && (
           <Typography variant="body1">
