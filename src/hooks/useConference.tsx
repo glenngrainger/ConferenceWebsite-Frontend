@@ -62,7 +62,18 @@ const useConference = () => {
     },
   });
 
+  const getConferenceById = (id: string) => {
+    // TODO - add fetch if not on the cache?
+    return queryClient
+      .getQueryData<Conference[]>([
+        "Conferences",
+        { organisationId: selectedOrganisationId },
+      ])
+      ?.find((x) => x.id === id);
+  };
+
   return {
+    getConferenceById,
     conferences,
     validationErrors,
     addConferenceMutation,

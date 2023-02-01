@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { AiOutlineClose } from "react-icons/ai";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { CardActions, MenuItem } from "@mui/material";
+import { useSnackbar } from "notistack";
 import ConferenceNavigation from "./conferenceNavigation";
 import ConferenceDetailsForm, {
   AddConferenceHandle,
@@ -16,6 +16,7 @@ import ConferenceDetailsForm, {
 import useConferenceModalStore from "./useConferenceModalStore";
 import shallow from "zustand/shallow";
 import Conference from "../../../models/Conference";
+import useConference from "../../../hooks/useConference";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -38,7 +39,8 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
     modalTriggerRef
   ) => {
     const formRef = useRef<AddConferenceHandle>(null);
-
+    const { enqueueSnackbar } = useSnackbar();
+    const { getConferenceById } = useConference();
     const {
       isOpen,
       openModal,
@@ -74,8 +76,17 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
       setIsInitialCreate(isInitialCreate || false);
 
       // Set the conference if updating every time the modal is opened
-      if (!isInitialCreate && initialConference !== undefined) {
-        setConference(initialConference);
+      if (
+        !isInitialCreate &&
+        initialConference !== undefined &&
+        initialConference.id
+      ) {
+        const conference = getConferenceById(initialConference.id);
+        if (conference === undefined) {
+          enqueueSnackbar("Conference not found", { variant: "error" });
+          return;
+        }
+        setConference(conference);
       }
       openModal();
     };
