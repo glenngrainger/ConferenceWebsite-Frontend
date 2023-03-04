@@ -27,7 +27,7 @@ export const deleteOrganisationCall = async (id: string) => {
 
 // Conference
 export const getConferencesCall = async (organisationId: string) => {
-  var resp = await APIGet(BASE_URL, `Conferences/${organisationId}`);
+  var resp = await APIGet(BASE_URL, `Conference/${organisationId}`);
   return (await resp.data) as Conference[];
 };
 

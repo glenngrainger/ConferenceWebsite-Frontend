@@ -10,6 +10,10 @@ export const APIGet = async (
   isSSR?: boolean
 ) => {
   if (isSSR) axios.defaults.httpsAgent = httpsAgent;
+
+  if (!isSSR) {
+    return axios.get(URL, ssrConfig(route, token));
+  }
   return axios.get(`${URL}/${route}`, defaultConfig(token));
 };
 
@@ -32,6 +36,10 @@ export const APIPut = async (
   isSSR?: boolean
 ) => {
   if (isSSR) axios.defaults.httpsAgent = httpsAgent;
+
+  if (!isSSR) {
+    return axios.put(URL, data, ssrConfig(route, token));
+  }
   return axios.put(`${URL}/${route}`, data, defaultConfig(token));
 };
 
@@ -42,9 +50,19 @@ export const APIDelete = async (
   isSSR?: boolean
 ) => {
   if (isSSR) axios.defaults.httpsAgent = httpsAgent;
+
+  if (!isSSR) {
+    return axios.delete(URL, ssrConfig(route, token));
+  }
   return axios.delete(`${URL}/${route}`, defaultConfig(token));
 };
 
 const defaultConfig = function (accessToken?: string) {
   return { headers: { Authorization: `Bearer ${accessToken}` } };
+};
+
+const ssrConfig = function (fetchURL: string, accessToken?: string) {
+  return {
+    headers: { Authorization: `Bearer ${accessToken}`, RequestUrl: fetchURL },
+  };
 };
