@@ -31,7 +31,7 @@ const ConferenceNavigation = () => {
     >
       <BottomNavigationAction value="Details" label="Details" />
       <BottomNavigationAction value="Scheduled" label="Scheduled" />
-      <BottomNavigationAction value="Documents" label="Documents" />
+      {/* <BottomNavigationAction value="Documents" label="Documents" /> */}
     </BottomNavigation>
   );
 };

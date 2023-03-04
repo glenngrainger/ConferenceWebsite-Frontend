@@ -52,11 +52,12 @@ const CardItem = ({ conference }: { conference: Conference }) => {
         variant="outlined"
       >
         <CardHeader
-          action={
-            <IconButton aria-label="settings">
-              <BiDotsVerticalRounded />
-            </IconButton>
-          }
+          // Temporarily comment out until deleting is enabled
+          // action={
+          //   <IconButton aria-label="settings">
+          //     <BiDotsVerticalRounded />
+          //   </IconButton>
+          // }
           title={conference.name}
           subheader={conferenceCountText}
         />

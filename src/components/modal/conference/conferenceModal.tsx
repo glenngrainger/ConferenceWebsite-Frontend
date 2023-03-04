@@ -17,6 +17,7 @@ import useConferenceModalStore from "./useConferenceModalStore";
 import shallow from "zustand/shallow";
 import Conference from "../../../models/Conference";
 import useConference from "../../../hooks/useConference";
+import Occurrences from "./occurrence/occurrences";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -105,45 +106,45 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
     }, []);
 
     return (
-      <>
-        <Dialog
-          fullScreen
-          open={isOpen}
-          onClose={closeModal}
-          TransitionComponent={Transition}
-        >
-          <AppBar sx={{ position: "relative" }}>
-            <Toolbar>
-              <IconButton
-                edge="start"
-                color="inherit"
-                onClick={closeModal}
-                aria-label="close"
-              >
-                <AiOutlineClose />
-              </IconButton>
-              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                {isCurrentlyCreating ? "New Conference" : conference?.name}
-              </Typography>
+      <Dialog
+        fullScreen
+        open={isOpen}
+        onClose={closeModal}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={closeModal}
+              aria-label="close"
+            >
+              <AiOutlineClose />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              {isCurrentlyCreating ? "New Conference" : conference?.name}
+            </Typography>
+            {selectedNavTab !== "Scheduled" && (
               <Button
                 autoFocus
                 color="inherit"
                 onClick={() => formRef?.current?.triggerSave()}
               >
-                {/* <Button autoFocus color="inherit" onClick={triggerAPIRequest}> */}
                 {isCurrentlyCreating ? "Create" : "Save"}
               </Button>
-            </Toolbar>
-          </AppBar>
-          {selectedNavTab === "Details" && (
-            <ConferenceDetailsForm
-              ref={formRef}
-              initialValues={conference || {}}
-            />
-          )}
-          {!isCurrentlyCreating && <ConferenceNavigation />}
-        </Dialog>
-      </>
+            )}
+          </Toolbar>
+        </AppBar>
+        {selectedNavTab === "Details" && (
+          <ConferenceDetailsForm
+            ref={formRef}
+            initialValues={conference || {}}
+          />
+        )}
+        {selectedNavTab === "Scheduled" && <Occurrences />}
+        {!isCurrentlyCreating && <ConferenceNavigation />}
+      </Dialog>
     );
   }
 );
