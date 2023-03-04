@@ -18,7 +18,7 @@ const Occurrences = () => {
           borderColor: "grey.300",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        {/* <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography
             variant="h5"
             sx={{ fontWeight: 500, color: "text.secondary" }}
@@ -27,8 +27,8 @@ const Occurrences = () => {
           </Typography>
           <Button color="error">Delete</Button>
         </Box>
-        <OccurrenceForm />
-        {/* <NoItemSelected /> */}
+        <OccurrenceForm /> */}
+        <NoItemSelected />
       </Box>
     </Box>
   );

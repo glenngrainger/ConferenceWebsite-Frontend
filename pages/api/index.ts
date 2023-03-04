@@ -52,7 +52,6 @@ export default withApiAuthRequired(async function handle(req, res) {
         res.status(500).end("Not found");
     }
   } catch (error: any) {
-    console.error(error);
     res.status(error.status || 500).json(error?.response?.data);
   }
 });
