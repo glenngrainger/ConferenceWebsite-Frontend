@@ -7,6 +7,8 @@ export interface OccurrenceSectionState {
   setIsCurrentlyCreating: (state: boolean) => void;
   occurrence: Occurrence | undefined;
   setOccurrence: (conference: Occurrence) => void;
+  currentView: "list" | "form";
+  setCurrentView: (view: "list" | "form") => void;
 }
 
 const { Provider, useStore } =
@@ -16,10 +18,19 @@ const createStore = () =>
   create<OccurrenceSectionState>((set) => ({
     isCurrentlyCreating: false,
     setIsCurrentlyCreating: (state) =>
-      set(() => ({ isCurrentlyCreating: state })),
+      set((prev) => ({
+        isCurrentlyCreating: state,
+        currentView: state ? "form" : prev.currentView,
+      })),
     occurrence: undefined,
     setOccurrence: (occurrence) =>
-      set(() => ({ occurrence: occurrence, isCurrentlyCreating: false })),
+      set(() => ({
+        occurrence: occurrence,
+        isCurrentlyCreating: false,
+        currentView: "form",
+      })),
+    currentView: "list",
+    setCurrentView: (view) => set(() => ({ currentView: view })),
   }));
 
 export const OccurrenceSectionStateProvider = ({

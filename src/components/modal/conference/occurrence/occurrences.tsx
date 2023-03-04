@@ -12,12 +12,24 @@ const Occurrences = () => {
       isCurrentlyCreating: state.isCurrentlyCreating,
       setIsCurrentlyCreating: state.setIsCurrentlyCreating,
       occurrence: state.occurrence,
+      currentView: state.currentView,
+      setCurrentView: state.setCurrentView,
     }),
     shallow
   );
   return (
     <Box sx={{ display: { xs: "block", md: "flex" }, gap: 2 }}>
-      <Box sx={{ flex: 1, py: 2, height: "calc(100vh - 120px)" }}>
+      <Box
+        sx={{
+          flex: 1,
+          py: 2,
+          height: "calc(100vh - 120px)",
+          display: {
+            xs: occurrenceSection.currentView !== "list" ? "none" : "block",
+            md: "block",
+          },
+        }}
+      >
         <OccurrencesList />
       </Box>
       <Box
@@ -26,6 +38,10 @@ const Occurrences = () => {
           flex: 1,
           p: 2,
           borderLeft: `1px solid ${theme.palette.grey[300]}`,
+          display: {
+            xs: occurrenceSection.currentView !== "form" ? "none" : "block",
+            md: "block",
+          },
         }}
       >
         {occurrenceSection.isCurrentlyCreating ||
@@ -42,9 +58,10 @@ const Occurrences = () => {
                 <>
                   <Button
                     color="warning"
-                    onClick={() =>
-                      occurrenceSection.setIsCurrentlyCreating(false)
-                    }
+                    onClick={() => {
+                      occurrenceSection.setIsCurrentlyCreating(false);
+                      occurrenceSection.setCurrentView("list");
+                    }}
                   >
                     Cancel
                   </Button>
