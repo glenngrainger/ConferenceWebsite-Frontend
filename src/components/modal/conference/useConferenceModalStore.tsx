@@ -1,4 +1,4 @@
-import create, { Mutate, StoreApi } from "zustand";
+import create, { StoreApi } from "zustand";
 import createContext from "zustand/context";
 import Conference from "../../../models/Conference";
 

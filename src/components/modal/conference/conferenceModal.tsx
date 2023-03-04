@@ -18,6 +18,7 @@ import shallow from "zustand/shallow";
 import Conference from "../../../models/Conference";
 import useConference from "../../../hooks/useConference";
 import Occurrences from "./occurrence/occurrences";
+import { OccurrenceSectionStateProvider } from "./occurrence/useOccurrenceSectionStore";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -142,7 +143,11 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
             initialValues={conference || {}}
           />
         )}
-        {selectedNavTab === "Scheduled" && <Occurrences />}
+        {selectedNavTab === "Scheduled" && (
+          <OccurrenceSectionStateProvider>
+            <Occurrences />
+          </OccurrenceSectionStateProvider>
+        )}
         {!isCurrentlyCreating && <ConferenceNavigation />}
       </Dialog>
     );

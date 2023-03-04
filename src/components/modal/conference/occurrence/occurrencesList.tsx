@@ -7,10 +7,20 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import shallow from "zustand/shallow";
 import useOccurrence from "../../../../hooks/useOccurrence";
+import useOccurrenceSectionStore from "./useOccurrenceSectionStore";
 
 const OccurrencesList = () => {
   const { occurrences } = useOccurrence();
+  const { setIsCurrentlyCreating, isCurrentlyCreating } =
+    useOccurrenceSectionStore(
+      (state) => ({
+        setIsCurrentlyCreating: state.setIsCurrentlyCreating,
+        isCurrentlyCreating: state.isCurrentlyCreating,
+      }),
+      shallow
+    );
   const occurrencesList = occurrences.data || [];
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
@@ -19,9 +29,14 @@ const OccurrencesList = () => {
           variant="h5"
           sx={{ fontWeight: 500, color: "text.secondary" }}
         >
-          0 Occurrences found
+          {occurrencesList.length} Occurrences found
         </Typography>
-        <Button>Create</Button>
+        <Button
+          sx={{ visibility: isCurrentlyCreating ? "hidden" : "visible" }}
+          onClick={() => setIsCurrentlyCreating(true)}
+        >
+          Create
+        </Button>
       </Box>
       <List sx={{ overflow: "auto", height: "calc(100% - 36px)" }}>
         {occurrencesList.map((x) => (
