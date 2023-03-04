@@ -6,11 +6,7 @@ const BASE_URL = "https://localhost:7219/api";
 export default withApiAuthRequired(async function handle(req, res) {
   try {
     const { accessToken } = await getAccessToken(req, res);
-    const {
-      body,
-      query: { id, name },
-      method,
-    } = req;
+    const { body, method } = req;
     const requestUrl = req.headers["requesturl"];
 
     if (!requestUrl) {
