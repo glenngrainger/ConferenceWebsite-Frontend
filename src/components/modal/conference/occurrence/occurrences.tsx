@@ -1,11 +1,13 @@
 import { Box, Button, Typography, useTheme } from "@mui/material";
 import NoItemSelected from "./noItemSelected";
 import OccurrencesList from "./occurrencesList";
-import OccurrenceForm from "./occurrenceForm";
+import OccurrenceForm, { AddOccurrenceHandle } from "./occurrenceForm";
 import useOccurrenceSectionStore from "./useOccurrenceSectionStore";
 import shallow from "zustand/shallow";
+import { useRef } from "react";
 
 const Occurrences = () => {
+  const occurrenceFormRef = useRef<AddOccurrenceHandle>(null);
   const theme = useTheme();
   const occurrenceSection = useOccurrenceSectionStore(
     (state) => ({
@@ -17,6 +19,7 @@ const Occurrences = () => {
     }),
     shallow
   );
+
   return (
     <Box sx={{ display: { xs: "block", md: "flex" }, gap: 2 }}>
       <Box
@@ -65,7 +68,11 @@ const Occurrences = () => {
                   >
                     Cancel
                   </Button>
-                  <Button>Create</Button>
+                  <Button
+                    onClick={() => occurrenceFormRef?.current?.triggerSave()}
+                  >
+                    Create
+                  </Button>
                 </>
               ) : (
                 <>
@@ -74,7 +81,10 @@ const Occurrences = () => {
                 </>
               )}
             </Box>
-            <OccurrenceForm />
+            <OccurrenceForm
+              ref={occurrenceFormRef}
+              initialValues={occurrenceSection.occurrence}
+            />
           </>
         ) : (
           <NoItemSelected />

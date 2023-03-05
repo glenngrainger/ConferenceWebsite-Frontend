@@ -21,6 +21,7 @@ const createStore = () =>
       set((prev) => ({
         isCurrentlyCreating: state,
         currentView: state ? "form" : prev.currentView,
+        occurrence: undefined,
       })),
     occurrence: undefined,
     setOccurrence: (occurrence) =>

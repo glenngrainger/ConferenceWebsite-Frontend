@@ -52,3 +52,8 @@ export const getOccurrencesCall = async (conferenceId: string) => {
   var resp = await APIGet(BASE_URL, `Occurrence/${conferenceId}`);
   return (await resp.data) as Occurrence[];
 };
+
+export const addOccurrenceCall = async (data: object) => {
+  var resp = await APIPost(BASE_URL, "Occurrence", data);
+  return (await resp.data) as Occurrence;
+};

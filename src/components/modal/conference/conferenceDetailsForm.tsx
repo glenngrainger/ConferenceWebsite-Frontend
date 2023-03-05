@@ -1,5 +1,5 @@
 import { Box, TextField, Typography } from "@mui/material";
-import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useImperativeHandle } from "react";
 import shallow from "zustand/shallow";
 import useConference from "../../../hooks/useConference";
 import useOrganisation from "../../../hooks/useOrganisation";

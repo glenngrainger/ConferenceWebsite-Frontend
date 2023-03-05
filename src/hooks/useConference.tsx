@@ -13,12 +13,11 @@ import Conference from "../models/Conference";
 const useConference = () => {
   const queryClient = useQueryClient();
   const validationErrors = useErrors();
+
   const selectedOrganisationId = useOrganisationStore(
     (state) => state.selectedOrganisationId,
     shallow
   );
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const conferences = useQuery(
     ["Conferences", { organisationId: selectedOrganisationId }],

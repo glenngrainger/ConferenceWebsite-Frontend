@@ -25,6 +25,9 @@ export const APIPost = async (
   isSSR?: boolean
 ) => {
   if (isSSR) axios.defaults.httpsAgent = httpsAgent;
+  if (!isSSR) {
+    return axios.post(URL, data, ssrConfig(route, token));
+  }
   return axios.post(`${URL}/${route}`, data, defaultConfig(token));
 };
 
