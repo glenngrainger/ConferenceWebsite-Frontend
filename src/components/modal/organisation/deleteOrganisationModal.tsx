@@ -56,7 +56,7 @@ const DeleteOrganisationModal = ({
         <DialogContent>
           <DialogContentText>
             Are you sure you want to delete the organisation? This action cannot
-            be reversed
+            be undone
           </DialogContentText>
         </DialogContent>
         <DialogActions>

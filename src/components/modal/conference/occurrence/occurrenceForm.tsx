@@ -129,24 +129,24 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
             autoFocus
             margin="dense"
             id="name"
-            // label="Date"
             type="date"
             fullWidth
             variant="standard"
             onChange={(e) => updateValues("date", e.target.value)}
             {...ReturnErrorProps("DateTime", validationErrors.validationErrors)}
+            disabled={!occurrenceSection.isCurrentlyCreating}
           />
           <TextField
             value={values["time"] || ""}
             autoFocus
             margin="dense"
             id="name"
-            // label="Time"
             type="time"
             fullWidth
             variant="standard"
             onChange={(e) => updateValues("time", e.target.value)}
             {...ReturnErrorProps("DateTime", validationErrors.validationErrors)}
+            disabled={!occurrenceSection.isCurrentlyCreating}
           />
         </Box>
         <TextField
@@ -159,6 +159,7 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
           variant="standard"
           onChange={(e) => updateValues("duration", e.target.value)}
           {...ReturnErrorProps("Duration", validationErrors.validationErrors)}
+          disabled={!occurrenceSection.isCurrentlyCreating}
         />
         {!occurrenceSection.isCurrentlyCreating && (
           <>

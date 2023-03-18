@@ -5,9 +5,11 @@ import OccurrenceForm, { AddOccurrenceHandle } from "./occurrenceForm";
 import useOccurrenceSectionStore from "./useOccurrenceSectionStore";
 import shallow from "zustand/shallow";
 import { useRef } from "react";
+import DeleteModal, { DeleteModalHandle } from "../../shared/deleteModal";
 
 const Occurrences = () => {
   const occurrenceFormRef = useRef<AddOccurrenceHandle>(null);
+  const deleteModalRef = useRef<DeleteModalHandle>(null);
   const theme = useTheme();
   const occurrenceSection = useOccurrenceSectionStore(
     (state) => ({
@@ -76,8 +78,13 @@ const Occurrences = () => {
                 </>
               ) : (
                 <>
-                  <Button color="error">Delete</Button>
-                  <Button>Save</Button>
+                  <Button
+                    color="error"
+                    onClick={deleteModalRef?.current?.showModal}
+                  >
+                    Delete
+                  </Button>
+                  {/* <Button>Save</Button> */}
                 </>
               )}
             </Box>
@@ -90,6 +97,13 @@ const Occurrences = () => {
           <NoItemSelected />
         )}
       </Box>
+      <DeleteModal
+        ref={deleteModalRef}
+        resourceType="Occurrence"
+        confirmCallback={() => {
+          console.log("delete!");
+        }}
+      />
     </Box>
   );
 };
