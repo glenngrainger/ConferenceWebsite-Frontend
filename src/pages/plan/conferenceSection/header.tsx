@@ -11,9 +11,12 @@ import { AiOutlineDown } from "react-icons/ai";
 import ConferenceModal from "../../../components/modal/conference/conferenceModal";
 import { ConferenceModalStateProvider } from "../../../components/modal/conference/useConferenceModalStore";
 import AdminAccessModal from "../../../components/modal/organisation/adminAccessModal";
-import DeleteOrganisationModal from "../../../components/modal/organisation/deleteOrganisationModal";
 import UpdateOrganisationModal from "../../../components/modal/organisation/updateOrganisationModal";
+import DeleteModal, {
+  DeleteModalHandle,
+} from "../../../components/modal/shared/deleteModal";
 import useConference from "../../../hooks/useConference";
+import useOrganisation from "../../../hooks/useOrganisation";
 import useMenu from "../hooks/useMenu";
 
 const ConferenceSectionHeader = () => {
@@ -38,7 +41,17 @@ const ConferenceSectionHeader = () => {
 
 const ManageOrganisationMenu = () => {
   const conferenceModalRef = useRef(null);
+  const deleteOrganisationModalRef = useRef<DeleteModalHandle>(null);
+  const { deleteOrganisationMutation, getCurrentSelectedOrganisation } =
+    useOrganisation();
+  const selectedOrganisation = getCurrentSelectedOrganisation();
   const { open, anchorEl, handleClick, handleClose } = useMenu();
+
+  const deleteOrganisationHandler = async () => {
+    await deleteOrganisationMutation.mutateAsync(
+      selectedOrganisation?.id || ""
+    );
+  };
   return (
     <>
       <Button
@@ -72,9 +85,25 @@ const ManageOrganisationMenu = () => {
         </ConferenceModalStateProvider>
         <Divider />
         <UpdateOrganisationModal modalClosedCallback={handleClose} />
-        <DeleteOrganisationModal modalClosedCallback={handleClose} />
+        <MenuItem
+          onClick={() => {
+            deleteOrganisationModalRef?.current?.showModal();
+            handleClose();
+          }}
+        >
+          Delete Organisation
+        </MenuItem>
+        {/* <DeleteOrganisationModal modalClosedCallback={handleClose} /> */}
         <AdminAccessModal modalClosedCallback={handleClose} />
       </Menu>
+      <DeleteModal
+        ref={deleteOrganisationModalRef}
+        resourceType="Organisation"
+        confirmCallback={deleteOrganisationHandler}
+        extraDetails={
+          <>{selectedOrganisation?.name} will be permanently deleted</>
+        }
+      />
     </>
   );
 };
