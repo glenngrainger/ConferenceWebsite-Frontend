@@ -6,6 +6,7 @@ import useOccurrenceSectionStore from "./useOccurrenceSectionStore";
 import shallow from "zustand/shallow";
 import { useRef } from "react";
 import DeleteModal, { DeleteModalHandle } from "../../shared/deleteModal";
+import useOccurrence from "../../../../hooks/useOccurrence";
 
 const Occurrences = () => {
   const occurrenceFormRef = useRef<AddOccurrenceHandle>(null);
@@ -21,6 +22,13 @@ const Occurrences = () => {
     }),
     shallow
   );
+  const { deleteOccurrenceMutation } = useOccurrence();
+
+  const deleteOccurrenceHandler = async () => {
+    await deleteOccurrenceMutation.mutateAsync(
+      occurrenceSection?.occurrence?.id || ""
+    );
+  };
 
   return (
     <Box sx={{ display: { xs: "block", md: "flex" }, gap: 2 }}>
@@ -100,9 +108,7 @@ const Occurrences = () => {
       <DeleteModal
         ref={deleteModalRef}
         resourceType="Occurrence"
-        confirmCallback={() => {
-          console.log("delete!");
-        }}
+        confirmCallback={deleteOccurrenceHandler}
       />
     </Box>
   );

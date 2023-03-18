@@ -57,3 +57,8 @@ export const addOccurrenceCall = async (data: object) => {
   var resp = await APIPost(BASE_URL, "Occurrence", data);
   return (await resp.data) as Occurrence;
 };
+
+export const deleteOccurrenceCall = async (id: string) => {
+  await APIDelete(BASE_URL, `Occurrence/${id}`);
+  return id;
+};

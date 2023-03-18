@@ -7,6 +7,7 @@ export interface OccurrenceSectionState {
   setIsCurrentlyCreating: (state: boolean) => void;
   occurrence: Occurrence | undefined;
   setOccurrence: (conference: Occurrence) => void;
+  clearSelectedOccurrence: () => void;
   currentView: "list" | "form";
   setCurrentView: (view: "list" | "form") => void;
 }
@@ -30,6 +31,8 @@ const createStore = () =>
         isCurrentlyCreating: false,
         currentView: "form",
       })),
+    clearSelectedOccurrence: () =>
+      set(() => ({ occurrence: undefined, currentView: "list" })),
     currentView: "list",
     setCurrentView: (view) => set(() => ({ currentView: view })),
   }));
