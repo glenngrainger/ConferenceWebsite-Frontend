@@ -9,7 +9,6 @@ import { AiOutlineClose } from "react-icons/ai";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { useSnackbar } from "notistack";
-import ConferenceNavigation from "./conferenceNavigation";
 import ConferenceDetailsForm, {
   AddConferenceHandle,
 } from "./conferenceDetailsForm";
@@ -19,6 +18,9 @@ import Conference from "../../../models/Conference";
 import useConference from "../../../hooks/useConference";
 import Occurrences from "./occurrence/occurrences";
 import { OccurrenceSectionStateProvider } from "./occurrence/useOccurrenceSectionStore";
+import Tabs from "../../tabs/tabs";
+
+const tabOptions = ["Details", "Scheduled"];
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -52,6 +54,7 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
       conference,
       setConference,
       selectedNavTab,
+      setSelectedNavTab,
     } = useConferenceModalStore(
       (state) => ({
         isOpen: state.isOpen,
@@ -63,6 +66,7 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
         conference: state.conference,
         setConference: state.setConference,
         selectedNavTab: state.selectedNavTab,
+        setSelectedNavTab: state.setSelectedNavTab,
       }),
       shallow
     );
@@ -148,7 +152,15 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
             <Occurrences />
           </OccurrenceSectionStateProvider>
         )}
-        {!isCurrentlyCreating && <ConferenceNavigation />}
+        {!isCurrentlyCreating && (
+          <Tabs
+            tabOptions={tabOptions}
+            selectedTab={selectedNavTab}
+            tabChangedCallback={(tab) =>
+              setSelectedNavTab(tab as "Details" | "Documents" | "Scheduled")
+            }
+          />
+        )}
       </Dialog>
     );
   }
