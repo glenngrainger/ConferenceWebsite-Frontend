@@ -7,20 +7,27 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import moment from "moment";
 import shallow from "zustand/shallow";
 import useOccurrence from "../../../../hooks/useOccurrence";
 import useOccurrenceSectionStore from "./useOccurrenceSectionStore";
 
 const OccurrencesList = () => {
   const { occurrences } = useOccurrence();
-  const { setIsCurrentlyCreating, isCurrentlyCreating } =
-    useOccurrenceSectionStore(
-      (state) => ({
-        setIsCurrentlyCreating: state.setIsCurrentlyCreating,
-        isCurrentlyCreating: state.isCurrentlyCreating,
-      }),
-      shallow
-    );
+  const {
+    setIsCurrentlyCreating,
+    isCurrentlyCreating,
+    selectedOccurrence,
+    setOccurrence,
+  } = useOccurrenceSectionStore(
+    (state) => ({
+      setIsCurrentlyCreating: state.setIsCurrentlyCreating,
+      isCurrentlyCreating: state.isCurrentlyCreating,
+      selectedOccurrence: state.occurrence,
+      setOccurrence: state.setOccurrence,
+    }),
+    shallow
+  );
   const occurrencesList = occurrences.data || [];
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
@@ -39,11 +46,21 @@ const OccurrencesList = () => {
         </Button>
       </Box>
       <List sx={{ overflow: "auto", height: "calc(100% - 36px)" }}>
-        {occurrencesList.map((x) => (
-          <ListItem>
-            <ListItemButton>
-              <ListItemText>Monday 3rd September</ListItemText>
-              <ListItemText sx={{ textAlign: "end" }}>30 mins</ListItemText>
+        {occurrencesList.map((occurrence) => (
+          <ListItem key={occurrence.id}>
+            <ListItemButton
+              selected={occurrence?.id === selectedOccurrence?.id}
+              onClick={() => setOccurrence(occurrence)}
+            >
+              <ListItemText>
+                {moment
+                  .utc(occurrence.dateTime, "YYYY-MM-DD HH:mm")
+                  .local()
+                  .format("dddd Do MMMM YYYY HH:mm")}
+              </ListItemText>
+              <ListItemText sx={{ textAlign: "end" }}>
+                {occurrence.duration} mins
+              </ListItemText>
             </ListItemButton>
           </ListItem>
         ))}

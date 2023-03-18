@@ -1,7 +1,7 @@
 import moment from "moment";
 import { Box, Link, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import shallow from "zustand/shallow";
 import useOccurrence from "../../../../hooks/useOccurrence";
 import { Occurrence } from "../../../../models/Occurrence";
@@ -18,6 +18,8 @@ type Props = {
   initialValues: any;
 };
 
+const dateTimeFormat = "YYYY-MM-DD HH:mm";
+
 const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
   ({ initialValues }, ref) => {
     const { enqueueSnackbar } = useSnackbar();
@@ -26,6 +28,7 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
     );
     const occurrenceSection = useOccurrenceSectionStore((state) => ({
       isCurrentlyCreating: state.isCurrentlyCreating,
+      occurrence: state.occurrence,
     }));
 
     const { addOccurrenceMutation, validationErrors } = useOccurrence();
@@ -50,6 +53,20 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
       },
     }));
 
+    // If the selected occurence has changed update the form
+    useEffect(() => {
+      if (occurrenceSection.occurrence !== undefined) {
+        // Convert utc to local datetime
+        let selectedOccurrenceDetails = {
+          ...occurrenceSection.occurrence,
+          ...getDateTimeSeparateValues(occurrenceSection.occurrence.dateTime),
+        };
+        setAll(selectedOccurrenceDetails);
+      } else {
+        setAll({});
+      }
+    }, [occurrenceSection.occurrence]);
+
     const addOccurrence = async () => {
       let result = undefined;
       if (selectedConference !== undefined) {
@@ -57,9 +74,9 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
         if (validateDateTime()) {
           const data = {
             ...values,
+            dateTime: getUtcDateTime() as any,
             conferenceId: selectedConference?.id,
           } as Occurrence;
-          console.log(data);
           result = await addOccurrenceMutation.mutateAsync(data);
         }
       }
@@ -70,7 +87,6 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
     };
 
     const validateDateTime = function () {
-      const dateTimeFormat = "YYYY-MM-DD HH:mm";
       const date = values["date"];
       const time = values["time"];
       if (!date || !time) {
@@ -88,13 +104,21 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
         return false;
       }
 
-      const utcDateTime = moment(dateTime, dateTimeFormat)
-        .utc()
-        .format("YYYY-MM-DDTHH:mm");
-
-      updateValues("datetime", utcDateTime);
-
       return true;
+    };
+
+    const getUtcDateTime = function () {
+      const dateTime = `${values["date"]} ${values["time"]}`;
+      return moment(dateTime, dateTimeFormat).utc().format("YYYY-MM-DDTHH:mm");
+    };
+
+    const getDateTimeSeparateValues = function (dateTime: Date) {
+      const date = moment
+        .utc(dateTime, dateTimeFormat)
+        .local()
+        .format("YYYY-MM-DD");
+      const time = moment.utc(dateTime, dateTimeFormat).local().format("HH:mm");
+      return { date, time };
     };
 
     return (
