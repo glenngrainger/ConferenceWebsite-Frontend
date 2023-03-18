@@ -17,7 +17,7 @@ const Navigation = ({ isLoggedIn }: Props) => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
-          <MobileNav />
+          <MobileNav isLoggedIn={isLoggedIn} />
           <Typography
             variant="h6"
             component="div"
@@ -25,7 +25,7 @@ const Navigation = ({ isLoggedIn }: Props) => {
           >
             Conference
           </Typography>
-          <DesktopNav />
+          <DesktopNav isLoggedIn={isLoggedIn} />
           {isLoggedIn ? (
             <Button color="warning" variant="contained" href="/api/auth/logout">
               Logout
@@ -41,24 +41,29 @@ const Navigation = ({ isLoggedIn }: Props) => {
   );
 };
 
-const DesktopNav = () => {
+const DesktopNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const { pages } = useNavigation();
   return (
     <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-      {pages.map((page) => (
-        <Button
-          key={page}
-          onClick={() => {}}
-          sx={{ my: 2, color: "white", display: "block", fontWeight: 600 }}
-        >
-          {page}
-        </Button>
-      ))}
+      {pages.map((page) =>
+        page.mustBeLoggedIn && !isLoggedIn ? (
+          <></>
+        ) : (
+          <Button
+            key={page.name}
+            onClick={() => {}}
+            sx={{ my: 2, color: "white", display: "block", fontWeight: 600 }}
+            href={page.url}
+          >
+            {page.name}
+          </Button>
+        )
+      )}
     </Box>
   );
 };
 
-const MobileNav = () => {
+const MobileNav = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const { handleCloseNavMenu, anchorElNav, handleOpenNavMenu, pages } =
     useNavigation();
   return (
@@ -91,11 +96,19 @@ const MobileNav = () => {
           display: { xs: "block", md: "none" },
         }}
       >
-        {pages.map((page) => (
-          <MenuItem key={page} onClick={handleCloseNavMenu}>
-            <Typography textAlign="center">{page}</Typography>
-          </MenuItem>
-        ))}
+        {pages.map((page) =>
+          page.mustBeLoggedIn && !isLoggedIn ? (
+            <></>
+          ) : (
+            <MenuItem
+              key={page.name}
+              onClick={handleCloseNavMenu}
+              href={page.url}
+            >
+              <Typography textAlign="center">{page.name}</Typography>
+            </MenuItem>
+          )
+        )}
       </Menu>
     </Box>
   );

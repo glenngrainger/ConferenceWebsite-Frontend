@@ -1,6 +1,15 @@
 import { useState } from "react";
 
-const pages = ["Plan", "Browse", "Upcoming"];
+interface Page {
+  name: string;
+  url: string;
+  mustBeLoggedIn: boolean;
+}
+const pages: Page[] = [
+  { name: "Plan", mustBeLoggedIn: true, url: "/plan" },
+  // {name: 'Browse', mustBeLoggedIn: true},
+  // {name: 'Upcoming', mustBeLoggedIn: true},
+];
 
 const useNavigation = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
