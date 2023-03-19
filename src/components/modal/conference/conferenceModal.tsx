@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import AppBar from "@mui/material/AppBar";
@@ -20,6 +20,17 @@ import Occurrences from "./occurrence/occurrences";
 import { OccurrenceSectionStateProvider } from "./occurrence/useOccurrenceSectionStore";
 import Tabs from "../../tabs/tabs";
 
+export interface ConferenceModalHandle {
+  closeModal: () => void;
+  openModal: () => void;
+}
+
+type ConferenceModalProps = {
+  modalClosedCallback: () => void;
+  isInitialCreate?: boolean;
+  initialConference?: Conference | undefined;
+};
+
 const tabOptions = ["Details", "Scheduled"];
 
 const Transition = React.forwardRef(function Transition(
@@ -31,17 +42,8 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-type ConferenceModalProps = {
-  modalClosedCallback: () => void;
-  isInitialCreate?: boolean;
-  initialConference?: Conference | undefined;
-};
-
-const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
-  (
-    { modalClosedCallback, isInitialCreate, initialConference },
-    modalTriggerRef
-  ) => {
+const ConferenceModal = forwardRef<ConferenceModalHandle, ConferenceModalProps>(
+  ({ modalClosedCallback, isInitialCreate, initialConference }, ref) => {
     const formRef = useRef<AddConferenceHandle>(null);
     const { enqueueSnackbar } = useSnackbar();
     const { getConferenceById } = useConference();
@@ -71,14 +73,16 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
       shallow
     );
 
-    // Need to rethink this
-    // useEffect(() => {
-    //   if (!isOpen) {
-    //     modalClosedCallback();
-    //   }
-    // }, [isOpen]);
+    useImperativeHandle(ref, () => ({
+      closeModal() {
+        closeModal();
+      },
+      openModal() {
+        openModalHandler();
+      },
+    }));
 
-    const refOpenClickedHandler = () => {
+    const openModalHandler = () => {
       setIsInitialCreate(isInitialCreate || false);
 
       // Set the conference if updating every time the modal is opened
@@ -96,19 +100,6 @@ const ConferenceModal = forwardRef<HTMLElement, ConferenceModalProps>(
       }
       openModal();
     };
-
-    useEffect(() => {
-      // Type issue - will need to look into this
-      const ref = modalTriggerRef as React.RefObject<HTMLElement>;
-      if (ref !== null) {
-        ref.current?.addEventListener("click", refOpenClickedHandler);
-      }
-      return () => {
-        if (ref !== null) {
-          ref.current?.removeEventListener("click", refOpenClickedHandler);
-        }
-      };
-    }, []);
 
     return (
       <Dialog

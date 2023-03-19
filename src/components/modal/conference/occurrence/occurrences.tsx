@@ -87,6 +87,15 @@ const Occurrences = () => {
               ) : (
                 <>
                   <Button
+                    color="secondary"
+                    onClick={() => {
+                      occurrenceSection.setIsCurrentlyCreating(false);
+                      occurrenceSection.setCurrentView("list");
+                    }}
+                  >
+                    Back
+                  </Button>
+                  <Button
                     color="error"
                     onClick={deleteModalRef?.current?.showModal}
                   >

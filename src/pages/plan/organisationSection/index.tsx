@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   Box,
   Divider,
@@ -6,6 +7,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SpeedDial,
   Typography,
 } from "@mui/material";
 import { CgOrganisation } from "react-icons/cg";
@@ -13,9 +15,13 @@ import usePlanStore, { ViewEnum } from "../store/usePlanStore";
 import shallow from "zustand/shallow";
 import useOrganisation from "../../../hooks/useOrganisation";
 import useOrganisationStore from "../store/useOrganisationStore";
-import AddOrganisationModal from "../../../components/modal/organisation/addOrganisationModal";
+import AddOrganisationModal, {
+  AddOrganisationModalHandle,
+} from "../../../components/modal/organisation/addOrganisationModal";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const OrganisationSection = () => {
+  const addOrganisationModalRef = useRef<AddOrganisationModalHandle>(null);
   const selectedView = usePlanStore((state) => state.selectedView, shallow);
   const { organisations } = useOrganisation();
   const organisationsList = organisations.data || [];
@@ -78,8 +84,14 @@ const OrganisationSection = () => {
             </ListItem>
           ))}
         </List>
-        <AddOrganisationModal />
+        <SpeedDial
+          ariaLabel="Add organisation button"
+          sx={{ position: "absolute", bottom: 16, right: 16 }}
+          icon={<AiOutlinePlus />}
+          onClick={addOrganisationModalRef?.current?.openModal}
+        />
       </Box>
+      <AddOrganisationModal ref={addOrganisationModalRef} />
     </Box>
   );
 };

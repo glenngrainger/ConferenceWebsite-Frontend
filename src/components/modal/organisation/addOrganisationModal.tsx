@@ -1,4 +1,9 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, {
+  SyntheticEvent,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -6,41 +11,48 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, SpeedDial } from "@mui/material";
-import { AiOutlinePlus } from "react-icons/ai";
+import { Box } from "@mui/material";
 import useOrganisation from "../../../hooks/useOrganisation";
 import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
 import useForm from "../../../pages/plan/hooks/useForm";
 
-const AddOrganisationModal = () => {
-  const { addOrganisationMutation, addValidationErrors } = useOrganisation();
-  const { values, updateValues, clearValues } = useForm<{}>();
-  const [open, setOpen] = useState(false);
+export interface AddOrganisationModalHandle {
+  openModal: () => void;
+  closeModal: () => void;
+}
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+const AddOrganisationModal = forwardRef<AddOrganisationModalHandle>(
+  (props, ref) => {
+    const { addOrganisationMutation, addValidationErrors } = useOrganisation();
+    const { values, updateValues, clearValues } = useForm<{}>();
+    const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
-    clearValues();
-    addValidationErrors.clearErrors();
-    setOpen(false);
-  };
+    useImperativeHandle(ref, () => ({
+      openModal() {
+        handleClickOpen();
+      },
+      closeModal() {
+        handleClose();
+      },
+    }));
 
-  const addOrganisationHandler = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    await addOrganisationMutation.mutateAsync(values);
-    handleClose();
-  };
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
 
-  return (
-    <>
-      <SpeedDial
-        ariaLabel="Add organisation button"
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
-        icon={<AiOutlinePlus />}
-        onClick={handleClickOpen}
-      />
+    const handleClose = () => {
+      clearValues();
+      addValidationErrors.clearErrors();
+      setOpen(false);
+    };
+
+    const addOrganisationHandler = async (e: SyntheticEvent) => {
+      e.preventDefault();
+      await addOrganisationMutation.mutateAsync(values);
+      handleClose();
+    };
+
+    return (
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>New Organisation</DialogTitle>
         <DialogContent>
@@ -87,8 +99,8 @@ const AddOrganisationModal = () => {
           <Button onClick={addOrganisationHandler}>Create</Button>
         </DialogActions>
       </Dialog>
-    </>
-  );
-};
+    );
+  }
+);
 
 export default AddOrganisationModal;

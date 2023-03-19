@@ -10,7 +10,9 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 import { useRef } from "react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import ConferenceModal from "../../../components/modal/conference/conferenceModal";
+import ConferenceModal, {
+  ConferenceModalHandle,
+} from "../../../components/modal/conference/conferenceModal";
 import { ConferenceModalStateProvider } from "../../../components/modal/conference/useConferenceModalStore";
 import useConference from "../../../hooks/useConference";
 import Conference from "../../../models/Conference";
@@ -28,7 +30,7 @@ const ConferenceSectionGrid = () => {
 };
 
 const CardItem = ({ conference }: { conference: Conference }) => {
-  const scheduleBtnRef = useRef(null);
+  const conferenceModalRef = useRef<ConferenceModalHandle>(null);
   const conferenceCount = conference.occurrenceCount || 0;
   const conferenceCountText = `${conferenceCount} Occurrence${
     conferenceCount > 1 ? "s" : ""
@@ -71,13 +73,13 @@ const CardItem = ({ conference }: { conference: Conference }) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <Button size="small" ref={scheduleBtnRef}>
+          <Button size="small" onClick={conferenceModalRef?.current?.openModal}>
             Schedule
           </Button>
         </CardActions>
         <ConferenceModalStateProvider>
           <ConferenceModal
-            ref={scheduleBtnRef}
+            ref={conferenceModalRef}
             modalClosedCallback={() => {}}
             initialConference={conference}
             isInitialCreate={false}

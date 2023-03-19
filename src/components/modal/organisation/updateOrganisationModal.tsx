@@ -1,4 +1,9 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, {
+  SyntheticEvent,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -10,48 +15,50 @@ import useOrganisation from "../../../hooks/useOrganisation";
 import { ReturnErrorProps } from "../../../pages/plan/hooks/useErrors";
 import useForm from "../../../pages/plan/hooks/useForm";
 
-const UpdateOrganisationModal = ({
-  modalClosedCallback,
-}: {
-  modalClosedCallback: () => void;
-}) => {
-  const {
-    updateOrganisationMutation,
-    updateValidationErrors,
-    getCurrentSelectedOrganisation,
-  } = useOrganisation();
-  const { values, updateValues, clearValues, setAll } = useForm<{}>();
-  const [open, setOpen] = useState(false);
+export interface UpdateOrganisationModalHandle {
+  openModal: () => void;
+  closeModal: () => void;
+}
 
-  const handleClickOpen = () => {
-    const organisation = getCurrentSelectedOrganisation();
-    if (organisation === undefined) return;
-    setAll(organisation);
-    setOpen(true);
-  };
+const UpdateOrganisationModal = forwardRef<UpdateOrganisationModalHandle>(
+  (props, ref) => {
+    const {
+      updateOrganisationMutation,
+      updateValidationErrors,
+      getCurrentSelectedOrganisation,
+    } = useOrganisation();
+    const { values, updateValues, clearValues, setAll } = useForm<{}>();
+    const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
-    clearValues();
-    updateValidationErrors.clearErrors();
-    setOpen(false);
-    modalClosedCallback();
-  };
+    useImperativeHandle(ref, () => ({
+      openModal() {
+        handleClickOpen();
+      },
+      closeModal() {
+        handleClose();
+      },
+    }));
 
-  const updateOrganisationHandler = async (e: SyntheticEvent) => {
-    e.preventDefault();
-    await updateOrganisationMutation.mutateAsync(values);
-    handleClose();
-  };
+    const handleClickOpen = () => {
+      const organisation = getCurrentSelectedOrganisation();
+      if (organisation === undefined) return;
+      setAll(organisation);
+      setOpen(true);
+    };
 
-  return (
-    <>
-      <MenuItem
-        onClick={() => {
-          handleClickOpen();
-        }}
-      >
-        Update Organisation
-      </MenuItem>
+    const handleClose = () => {
+      clearValues();
+      updateValidationErrors.clearErrors();
+      setOpen(false);
+    };
+
+    const updateOrganisationHandler = async (e: SyntheticEvent) => {
+      e.preventDefault();
+      await updateOrganisationMutation.mutateAsync(values);
+      handleClose();
+    };
+
+    return (
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Update Organisation</DialogTitle>
         <DialogContent>
@@ -94,8 +101,8 @@ const UpdateOrganisationModal = ({
           <Button onClick={updateOrganisationHandler}>Update</Button>
         </DialogActions>
       </Dialog>
-    </>
-  );
-};
+    );
+  }
+);
 
 export default UpdateOrganisationModal;

@@ -8,10 +8,14 @@ import {
 } from "@mui/material";
 import { useRef } from "react";
 import { AiOutlineDown } from "react-icons/ai";
-import ConferenceModal from "../../../components/modal/conference/conferenceModal";
+import ConferenceModal, {
+  ConferenceModalHandle,
+} from "../../../components/modal/conference/conferenceModal";
 import { ConferenceModalStateProvider } from "../../../components/modal/conference/useConferenceModalStore";
 import AdminAccessModal from "../../../components/modal/organisation/adminAccessModal";
-import UpdateOrganisationModal from "../../../components/modal/organisation/updateOrganisationModal";
+import UpdateOrganisationModal, {
+  UpdateOrganisationModalHandle,
+} from "../../../components/modal/organisation/updateOrganisationModal";
 import DeleteModal, {
   DeleteModalHandle,
 } from "../../../components/modal/shared/deleteModal";
@@ -40,7 +44,9 @@ const ConferenceSectionHeader = () => {
 };
 
 const ManageOrganisationMenu = () => {
-  const conferenceModalRef = useRef(null);
+  const conferenceModalRef = useRef<ConferenceModalHandle>(null);
+  const updateOrganisationModalRef =
+    useRef<UpdateOrganisationModalHandle>(null);
   const deleteOrganisationModalRef = useRef<DeleteModalHandle>(null);
   const { deleteOrganisationMutation, getCurrentSelectedOrganisation } =
     useOrganisation();
@@ -52,6 +58,7 @@ const ManageOrganisationMenu = () => {
       selectedOrganisation?.id || ""
     );
   };
+
   return (
     <>
       <Button
@@ -75,16 +82,23 @@ const ManageOrganisationMenu = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem ref={conferenceModalRef}>New Conference</MenuItem>
-        <ConferenceModalStateProvider>
-          <ConferenceModal
-            ref={conferenceModalRef}
-            modalClosedCallback={handleClose}
-            isInitialCreate={true}
-          />
-        </ConferenceModalStateProvider>
+        <MenuItem
+          onClick={() => {
+            conferenceModalRef?.current?.openModal();
+            handleClose();
+          }}
+        >
+          New Conference
+        </MenuItem>
         <Divider />
-        <UpdateOrganisationModal modalClosedCallback={handleClose} />
+        <MenuItem
+          onClick={() => {
+            updateOrganisationModalRef?.current?.openModal();
+            handleClose();
+          }}
+        >
+          Update Organisation
+        </MenuItem>
         <MenuItem
           onClick={() => {
             deleteOrganisationModalRef?.current?.showModal();
@@ -93,9 +107,16 @@ const ManageOrganisationMenu = () => {
         >
           Delete Organisation
         </MenuItem>
-        {/* <DeleteOrganisationModal modalClosedCallback={handleClose} /> */}
-        <AdminAccessModal modalClosedCallback={handleClose} />
+        {/* <AdminAccessModal modalClosedCallback={handleClose} /> */}
       </Menu>
+      <ConferenceModalStateProvider>
+        <ConferenceModal
+          ref={conferenceModalRef}
+          modalClosedCallback={handleClose}
+          isInitialCreate={true}
+        />
+      </ConferenceModalStateProvider>
+      <UpdateOrganisationModal ref={updateOrganisationModalRef} />
       <DeleteModal
         ref={deleteOrganisationModalRef}
         resourceType="Organisation"
