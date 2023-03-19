@@ -3,8 +3,6 @@ import {
   BottomNavigationAction,
   useTheme,
 } from "@mui/material";
-import { AiOutlineClose } from "react-icons/ai";
-import shallow from "zustand/shallow";
 
 const Tabs = ({
   tabOptions,
