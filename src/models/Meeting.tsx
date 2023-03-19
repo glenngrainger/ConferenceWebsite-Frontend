@@ -4,7 +4,7 @@ import Organisation from "./Organisation";
 export interface Meeting {
   organisation: Organisation;
   conference: Conference;
-  DateTime: Date;
+  dateTime: Date;
   duration: Number;
   embeddedUrl: string;
   isHost: boolean;
