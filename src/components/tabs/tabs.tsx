@@ -28,7 +28,7 @@ const Tabs = ({
       }}
     >
       {tabOptions.map((tab) => (
-        <BottomNavigationAction value={tab} label={tab} />
+        <BottomNavigationAction key={tab} value={tab} label={tab} />
       ))}
     </BottomNavigation>
   );

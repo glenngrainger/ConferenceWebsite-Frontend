@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Box, Link, TextField, Typography } from "@mui/material";
+import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
 import shallow from "zustand/shallow";
@@ -163,19 +163,58 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
         />
         {!occurrenceSection.isCurrentlyCreating && (
           <>
-            <Typography variant="body1" sx={{ my: 2 }}>
-              Admin Url
-            </Typography>
-            <Link sx={{ cursor: "pointer" }}>Test Admin Url</Link>
-            <Typography variant="body1" sx={{ my: 2 }}>
-              Standard Url
-            </Typography>
-            <Link sx={{ cursor: "pointer" }}>Test Standard Url</Link>
+            <DisplayUrl
+              description="Admin Url"
+              url={`conference/${occurrenceSection?.occurrence?.adminMeetingLink}`}
+            />
+            <DisplayUrl
+              description="Standard Url"
+              url={`conference/${occurrenceSection?.occurrence?.attendeeMeetingLink}`}
+            />
           </>
         )}
       </Box>
     );
   }
 );
+
+const DisplayUrl = ({
+  url,
+  description,
+}: {
+  url: string;
+  description: string;
+}) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const copyToClipboard = function () {
+    navigator.clipboard.writeText(
+      `${process.env.NEXT_PUBLIC_VERCEL_URL}/${url}`
+    );
+    enqueueSnackbar("Copied to clipboard", { variant: "success" });
+  };
+
+  return (
+    <>
+      <Typography variant="body1" sx={{ mt: 2 }}>
+        {description}
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Link href={url} sx={{ cursor: "pointer" }}>
+          Join Conference
+        </Link>
+        <Button variant="outlined" color="secondary" onClick={copyToClipboard}>
+          Copy to Clipboard
+        </Button>
+      </Box>
+    </>
+  );
+};
 
 export default OccurrenceForm;
