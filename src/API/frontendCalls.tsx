@@ -1,4 +1,5 @@
 import Conference from "../models/Conference";
+import { Meeting } from "../models/Meeting";
 import { Occurrence } from "../models/Occurrence";
 import Organisation from "../models/Organisation";
 import { APIDelete, APIGet, APIPost, APIPut } from "./API";
@@ -61,4 +62,10 @@ export const addOccurrenceCall = async (data: object) => {
 export const deleteOccurrenceCall = async (id: string) => {
   await APIDelete(BASE_URL, `Occurrence/${id}`);
   return id;
+};
+
+// Meeting
+export const getMeetingCall = async (meetingId: string) => {
+  var resp = await APIGet(BASE_URL, `Meeting/${meetingId}`);
+  return (await resp.data) as Meeting;
 };

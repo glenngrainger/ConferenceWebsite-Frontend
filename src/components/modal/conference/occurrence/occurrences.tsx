@@ -88,6 +88,7 @@ const Occurrences = () => {
                 <>
                   <Button
                     color="secondary"
+                    sx={{ display: { xs: "block", md: "none" } }}
                     onClick={() => {
                       occurrenceSection.setIsCurrentlyCreating(false);
                       occurrenceSection.setCurrentView("list");
