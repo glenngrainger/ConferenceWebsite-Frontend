@@ -1,14 +1,17 @@
-import { useRef, useEffect } from "react";
-import { Box } from "@mui/material";
+import { useRef } from "react";
+import { useTheme } from "@mui/material/styles";
+import { Box, Typography } from "@mui/material";
 import Tabs from "../../components/tabs/tabs";
 import useMeeting from "../../hooks/useMeeting";
 import ConferenceDetailsModal, {
   ConferenceDetailsModalHandle,
 } from "../../components/modal/conference/conferenceDetailsModal/conferenceDetailsModal";
+import moment from "moment";
 
 const tabs = ["Conference", "Details"];
 
 const Meeting = () => {
+  const theme = useTheme();
   const conferenceDetailsModalRef = useRef<ConferenceDetailsModalHandle>(null);
   const { meeting } = useMeeting();
 
@@ -17,6 +20,40 @@ const Meeting = () => {
       conferenceDetailsModalRef?.current?.openModal();
     }
   };
+
+  if (meeting?.data === undefined) {
+    return <></>;
+  }
+
+  if (!meeting?.data?.hasStarted) {
+    return (
+      <Box
+        sx={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box
+          sx={{
+            p: 3,
+            border: `3px solid ${theme.palette.primary.main}`,
+            borderRadius: "6px",
+          }}
+        >
+          <Typography>
+            Conference starts{" "}
+            {moment
+              .utc(meeting?.data?.dateTime, "YYYY-MM-DD HH:mm")
+              .local()
+              .format("dddd Do MMMM YYYY HH:mm")}
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <>

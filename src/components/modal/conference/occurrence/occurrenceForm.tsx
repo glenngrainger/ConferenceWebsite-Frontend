@@ -55,6 +55,7 @@ const OccurrenceForm = forwardRef<AddOccurrenceHandle, Props>(
 
     // If the selected occurence has changed update the form
     useEffect(() => {
+      validationErrors.clearErrors();
       if (occurrenceSection.occurrence !== undefined) {
         // Convert utc to local datetime
         let selectedOccurrenceDetails = {

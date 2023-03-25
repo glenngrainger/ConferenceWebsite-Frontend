@@ -9,4 +9,5 @@ export interface Meeting {
   embeddedUrl: string;
   isHost: boolean;
   displayName: string;
+  hasStarted: boolean;
 }

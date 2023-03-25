@@ -54,15 +54,15 @@ const ConferenceDetailsModal = forwardRef<ConferenceDetailsModalHandle>(
         <DialogContent>
           <Typography>Organisation</Typography>
           <Typography color="GrayText" sx={{ mb: 1 }}>
-            {details.organisation?.name}
+            {details?.organisation?.name}
           </Typography>
           <Typography>Conference</Typography>
           <Typography color="GrayText" sx={{ mb: 1 }}>
-            {details.conference?.name}
+            {details?.conference?.name}
           </Typography>
           <Typography>Summary</Typography>
           <Typography color="GrayText" sx={{ mb: 1 }}>
-            {details.conference?.summary}
+            {details?.conference?.summary}
           </Typography>
           <Box
             sx={{
@@ -76,13 +76,13 @@ const ConferenceDetailsModal = forwardRef<ConferenceDetailsModalHandle>(
             <Typography>
               <>
                 {moment
-                  .utc(details.dateTime, "YYYY-MM-DD HH:mm")
+                  .utc(details?.dateTime, "YYYY-MM-DD HH:mm")
                   .local()
                   .format("dddd Do MMMM YYYY HH:mm")}
               </>
             </Typography>
             <Typography>
-              <>{details.duration} minutes</>
+              <>{details?.duration} minutes</>
             </Typography>
           </Box>
         </DialogContent>
