@@ -1,34 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Conference Website
 
-## Getting Started
+Website for organising remote conferences. Integrates with the WhereBy API.
 
-First, run the development server:
+**Frontend**
+- React (Next.js using TypeScript)
+- Material UI
+- Zustand for State Management
+- React Query
+- Moment
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+**Backend**
+- .Net 6 API
+- Entity Framework
+- Unit of Work pattern
+- Redis
+- Auth0
+- RestSharp
+- AutoMapper 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Backend code is in a separate private repository
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+**Screenshots**
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+![Screenshot 2023-10-10 222011](https://github.com/glenngrainger/ConferenceWebsite-Frontend/assets/91460978/f7ed5308-b0d6-47b7-b931-20fc83892a32)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+![Screenshot 2023-10-10 222147](https://github.com/glenngrainger/ConferenceWebsite-Frontend/assets/91460978/9a29642c-3fef-42ca-bdc2-b2ac766b51fd)
 
-## Learn More
+![Screenshot 2023-10-10 224900](https://github.com/glenngrainger/ConferenceWebsite-Frontend/assets/91460978/c1482305-321a-403e-b2a1-a3f43fb26df0)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+![Screenshot 2023-10-10 223238](https://github.com/glenngrainger/ConferenceWebsite-Frontend/assets/91460978/0b01c447-79e9-42b1-a453-064e411a35d0)
